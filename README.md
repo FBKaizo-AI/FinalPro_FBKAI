@@ -2,8 +2,6 @@
 AI-powered assistant for Yu-Gi-Oh: The Falsebound Kingdom players. FBKaizo AI lets users ask natural language questions about monster stats and abilities, removing the need to navigate complex Excel sheets. Built with React, Node.js, and GPT-3.5 Turbo.
 
 
-# FBKaizo AI
-
 **Project Purpose**  
 FBKaizo AI is a web-based assistant built to enhance the gameplay experience of *Yu-Gi-Oh: The Falsebound Kingdom* players. By leveraging AI, the app provides instant, natural language responses about monster stats and abilities, eliminating the need to search through bulky Excel sheets.
 
