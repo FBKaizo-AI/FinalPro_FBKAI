@@ -1,27 +1,59 @@
-# FinalPro_FBKAI
-AI-powered assistant for Yu-Gi-Oh: The Falsebound Kingdom players. FBKaizo AI lets users ask natural language questions about monster stats and abilities, removing the need to navigate complex Excel sheets. Built with React, Node.js, and GPT-3.5 Turbo.
+#  FBKaizo AI — Monster Stats Assistant for *Yu-Gi-Oh! The Falsebound Kingdom*
 
+**FBKaizo AI** is an intelligent assistant designed to improve how players engage with *Yu-Gi-Oh! The Falsebound Kingdom*. Instead of navigating large and complex Excel spreadsheets, players can simply ask the AI about monster stats, skills, and abilities — receiving fast and accurate answers in real time.
 
-**Project Purpose**  
-FBKaizo AI is a web-based assistant built to enhance the gameplay experience of *Yu-Gi-Oh: The Falsebound Kingdom* players. By leveraging AI, the app provides instant, natural language responses about monster stats and abilities, eliminating the need to search through bulky Excel sheets.
+---
 
-**Target Users**  
-- Casual players seeking quick access to in-game monster information.  
-- Competitive players conducting in-depth research or theory-crafting.
+##  Features
 
-**Key Features**  
-- AI-driven Q&A powered by GPT-3.5 Turbo  
-- Instant search for monster stats and skills  
-- Easy-to-use, responsive frontend  
-- Cleanly processed backend from community-created datasets
+-  Ask natural-language questions about monsters in the game
+-  Powered by **Gemini 1.5 Pro** for intelligent, fast responses
+-  Backend built with **Node.js**, **Express**, and **MongoDB**
+-  RESTful API for frontend/backend integration
+-  Stores and retrieves answers for efficient querying
 
-**Tech Stack**  
-- **Frontend**: React  
-- **Backend**: Node.js, Express  
-- **AI**: OpenAI GPT-3.5 Turbo API  
-- **Data Source**: Google Sheets → JSON transformation  
-- **Version Control**: Git + GitHub
+---
 
-**Authors**  
-- Frontend Developer: Jiyah Coleman  
-- Backend Developers: Dustin Peek, Markell L. Spann
+##  Use Case
+
+Whether you're a casual player wanting to know what a monster does, or a competitive player needing quick access to stat breakdowns, **FBKaizo AI** provides a cleaner, more interactive experience than digging through spreadsheets.
+
+---
+
+##  Project Scope
+
+> This project is limited to **monster stats and skills only**.
+>  No support for item locations, shops, or monster recruitment details.  
+>  Focused strictly on information from the community-made "Monster List (FBKaizo)" spreadsheet.
+
+---
+
+##  Data Source
+
+Data was sourced from the *Yu-Gi-Oh! FBKaizo* community spreadsheet:
+
+📎 [Monster List (FBKaizo) — Google Sheets](https://docs.google.com/spreadsheets/d/1II05Gkfgh4mkVTZ2ozaMvYJdfJ-Wq7xkwkL0L1BRmC4/edit?usp=sharing)
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend**: HTML/CSS/JS (static files)
+- **Backend**: Node.js + Express
+- **Database**: MongoDB Atlas
+- **AI Model**: Gemini 1.5 Pro (via Google Generative AI API)
+
+---
+
+##  Target Audience
+
+-  Casual players who want simple monster insights
+-  Competitive players looking to optimize team builds and strategies
+-  Anyone who finds spreadsheets overwhelming or time-consuming
+
+---
+
+# Authors:
+- Front End: Jiyah Coleman
+- Backend: Dustin Peek & Markell Spann
+
