@@ -1,17 +1,23 @@
-//CRUD ops for backend management with MongoDB
+require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
-const path = require ('path');
+const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
-// Initialize Gemini 
-const genAI = new GoogleGenerativeAI("AIzaSyAccKLci4aAOkj0mKafwS759G6OWiR-_js");
 
 const app = express();
 app.use(express.json());
-mongoose.connect('mongodb+srv://Markell:6zISMfqj7k6VO0xH@clustertest.keysisg.mongodb.net/FinalPro?retryWrites=true&w=majority')
 
-// Define our model for output
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Define model for output
 const aiOutputSchema = new mongoose.Schema({
   question: String,
   answer: String,
@@ -19,22 +25,34 @@ const aiOutputSchema = new mongoose.Schema({
 });
 const AIOutput = mongoose.model('AIOutput', aiOutputSchema);
 
-// POST route: receive question, generate Gemini answer, save, and return
+// POST route
 app.post('/api/ai-output', async (req, res) => {
   try {
     const { question } = req.body;
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const result = await model.generateContent(question);
     const answer = result.response.text();
 
-    // Save to MongoDB
     const output = new AIOutput({ question, answer });
     await output.save();
 
-    // Send response to frontend
     res.status(201).json(output);
   } catch (err) {
+    // Detect quota limit and suggest fallback
+    if (err.message.includes("429")) {
+      return res.status(429).json({
+        error: "Rate limit exceeded for gemini-1.5-pro. Try again later or switch to gemini-pro.",
+        info: "https://ai.google.dev/gemini-api/docs/rate-limits"
+      });
+    }
+
     res.status(500).json({ error: err.message });
   }
+});
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
