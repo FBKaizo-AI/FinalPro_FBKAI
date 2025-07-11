@@ -41,7 +41,7 @@ Data was sourced from the *Yu-Gi-Oh! FBKaizo* community spreadsheet:
 - **Frontend**: HTML/CSS/JS (static files)
 - **Backend**: Node.js + Express
 - **Database**: MongoDB Atlas
-- **AI Model**: Gemini 1.5 Pro (via Google Generative AI API)
+- **AI Model**: Gemini 2.5 Pro (via Google Generative AI API)
 
 ---
 
