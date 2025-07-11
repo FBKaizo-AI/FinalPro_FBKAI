@@ -80,6 +80,7 @@ app.post('/api/ai-output', async (req, res) => {
   }
 });
 
+//testing db connection
 app.get("/", async (req, res) => {
   try {
     const data = await AIOutput.find(); // Fetch all documents from the collection
