@@ -71,7 +71,7 @@ app.post('/api/ai-output', async (req, res) => {
     // Detect quota limit and suggest fallback
     if (err.message.includes("429")) {
       return res.status(429).json({
-        error: "Rate limit exceeded for gemini-1.5-pro. Try again later or switch to gemini-pro.",
+        error: "Rate limit exceeded for gemini-2.5-pro. Try again later or switch to gemini-pro.",
         info: "https://ai.google.dev/gemini-api/docs/rate-limits"
       });
     }
