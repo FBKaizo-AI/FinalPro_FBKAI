@@ -7,7 +7,7 @@
 ##  Features
 
 -  Ask natural-language questions about monsters in the game
--  Powered by **Gemini 1.5 Pro** for intelligent, fast responses
+-  Powered by **Gemini 2.5 Pro** for intelligent, fast responses
 -  Backend built with **Node.js**, **Express**, and **MongoDB**
 -  RESTful API for frontend/backend integration
 -  Stores and retrieves answers for efficient querying
