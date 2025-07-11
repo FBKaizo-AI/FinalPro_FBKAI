@@ -7,7 +7,7 @@
 ##  Features
 
 -  Ask natural-language questions about monsters in the game
--  Powered by **Gemini 1.5 Pro** for intelligent, fast responses
+-  Powered by **Gemini 2.5 Pro** for intelligent, fast responses
 -  Backend built with **Node.js**, **Express**, and **MongoDB**
 -  RESTful API for frontend/backend integration
 -  Stores and retrieves answers for efficient querying
@@ -41,7 +41,7 @@ Data was sourced from the *Yu-Gi-Oh! FBKaizo* community spreadsheet:
 - **Frontend**: HTML/CSS/JS (static files)
 - **Backend**: Node.js + Express
 - **Database**: MongoDB Atlas
-- **AI Model**: Gemini 1.5 Pro (via Google Generative AI API)
+- **AI Model**: Gemini 2.5 Pro (via Google Generative AI API)
 
 ---
 
