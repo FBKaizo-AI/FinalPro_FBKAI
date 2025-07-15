@@ -6,8 +6,6 @@ const cors = require('cors');
 // const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { GoogleGenAI } = require("@google/genai");
 
-//test comment to see if vercel disconnected, remove after testing
-
 const app = express();
 app.use(cors());
 app.use(express.json());
