@@ -58,17 +58,29 @@ const AIOutput = mongoose.model('FBKaizo', aiOutputSchema, 'FBKaizo');
 app.post('/api/ai-output', async (req, res) => {
   try {
     const { question } = req.body;
-    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    const result = await model.generateContent(question);
+    // Find monsters related to the query
+    const monsterMatches = await Monster.find({
+      name: { $regex: question, $options: 'i' }
+    }).limit(3);
+
+    // Build context for Gemini
+    let context = "Here is monster info from the database:\n";
+    monsterMatches.forEach(mon => {
+      context += `Name: ${mon.name}\nStats: ${mon.stats}\nAbilities: ${mon.abilities}\n\n`;
+    });
+    context += `User question: ${question}\nAI answer:`;
+
+    // giving the ai context to work with
+    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const result = await model.generateContent(context);
     const answer = result.response.text();
 
     const output = new AIOutput({ question, answer });
     await output.save();
-
     res.status(201).json(output);
   } catch (err) {
-    // Detect quota limit and suggest fallback
+    
     if (err.message.includes("429")) {
       return res.status(429).json({
         error: "Rate limit exceeded for gemini-2.5-flash. Try again later or switch to gemini-pro.",
@@ -90,6 +102,14 @@ app.get("/", async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 });
+
+ //makes a monster schema and model for ai response
+const monsterSchema = new mongoose.Schema({
+  name: String,
+  stats: String,
+  abilities: String,
+});
+const Monster = mongoose.model('Monster', monsterSchema, 'Monsters');
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
