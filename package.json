@@ -4,6 +4,7 @@
   "description": "",
   "main": "CRUD.js",
   "scripts": {
+    "start": "node CRUD.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
