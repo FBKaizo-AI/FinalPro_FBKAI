@@ -52,6 +52,13 @@ const aiOutputSchema = new mongoose.Schema({
 });
 const AIOutput = mongoose.model('FBKaizo', aiOutputSchema, 'FBKaizo');
 
+const monsterSchema = new mongoose.Schema({
+  name: String,
+  stats: String,
+  abilities: String,
+});
+const Monster = mongoose.model('Monster', monsterSchema, 'Monsters');
+
 // POST route
 app.post('/api/ai-output', async (req, res) => {
   try {
@@ -101,13 +108,6 @@ app.get("/", async (req, res) => {
   }
 });
 
- //makes a monster schema and model for ai response
-const monsterSchema = new mongoose.Schema({
-  name: String,
-  stats: String,
-  abilities: String,
-});
-const Monster = mongoose.model('Monster', monsterSchema, 'Monsters');
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -1,52 +1,72 @@
 require('dotenv').config();
-console.log("MONGO_URI:", process.env.MONGO_URI);
-const { MongoClient } = require('mongodb');
-const { get } = require('mongoose');
-const mongoose = require('mongoose');   
-const uri = process.env.MARKELL_MONGO;
-const client = new MongoClient(uri);
+const mongoose = require('mongoose');
+const Monster = require('../models/Monster'); //imports the monster model i defined from DB
 
-
-const MARKELL = process.env.MARKELL_MONGO;
-const DUSTIN = process.env.DUSTIN_MONGO;
-const JIYAH = process.env.JIYAH_MONGO;
-const db = process.env.DB;
-const COLL = process.env.COLLECTION;
+const MONGO_URI = process.env.MARKELL_MONGO;
 
 async function getMonsterStatsAtLevel(monsterName, level) {
     try {
-        await mongoose.connect(MARKELL, {
-        }).then(() => console.log("MongoDB connected"))
-        .catch((err) => console.error("MongoDB connection error:", err));
+        await mongoose.connect(MONGO_URI);
+        console.log("MongoDB connected");
 
-        const db = client.db(process.env.DB);
-        const collection = db.collection(process.env.COLLECTION);
+        const monster = await Monster.findOne({ "Monster Name": monsterName });
 
-        const monster = await collection.findOne({ MonsterName: monsterName });
         if (!monster) {
             console.log("Monster not found.");
             return null;
         }
 
-    
-        const statsAtLevel = {};
-        for (const stat in monster.MonsterStats) {
-            const base = monster.MonsterStats[stat];
-            const growth = monster.GrowthRates[stat];
-            statsAtLevel[stat] = base + growth * (level - 1);
-        }
+        const GT = monster.GT;  // Growth Rate per level
 
-        console.log(`Stats for ${monsterName} at level ${level}:`, statsAtLevel);
-        return statsAtLevel;
+        // Calculate scaled stats (base + GT * (level - 1))
+        const statsAtLevel = {
+            HP: monster.HP + GT * (level - 1),
+            ATK: monster.ATK + GT * (level - 1),
+            DEF: monster.DEF + GT * (level - 1),
+            AP: monster.AP,  // Assuming AP doesn't scale
+            Luck: monster.Luck,
+            Speed: monster.Speed
+        };
+
+        // Determine unlocked abilities
+        const unlockedAbilities = [];
+
+        if (level >= monster["Ability 1 Unlock (Level)"]) unlockedAbilities.push(monster["Ability 1"]);
+        if (level >= monster["Ability 2 Unlock (Level)"]) unlockedAbilities.push(monster["Ability 2"]);
+        if (level >= monster["Ability 3 Unlock (Level)"]) unlockedAbilities.push(monster["Ability 3"]);
+
+        // Attack Effect unlock check
+        const attackEffect = level >= monster["Attack Effect Unlock (Level)"]
+            ? monster["Attack Effect"]
+            : "Locked";
+
+        // Special Effect unlock check
+        const specialEffect = level >= monster["Special Unlock (Level)"] && monster["Special Unlock (Level)"] !== -1
+            ? `${monster["Special Name"]}: ${monster["Special Effect"]}`
+            : "Locked";
+
+        const result = {
+            MonsterName: monster["Monster Name"],
+            Class: monster.Class,
+            Stats: statsAtLevel,
+            UnlockedAbilities: unlockedAbilities,
+            AttackEffect: attackEffect,
+            SpecialEffect: specialEffect
+        };
+
+        console.log(result);
+        return result;
+
     } catch (error) {
-        console.error("Error connecting to the database:", error);
+        console.error("Error fetching monster data:", error);
         throw error;
     } finally {
-        await client.close();
+        await mongoose.connection.close();
+        console.log("MongoDB connection closed.");
     }
 }
 
-getMonsterStatsAtLevel("Dark Magician", 5)
+// Test Call 
+getMonsterStatsAtLevel("Alpha The Magnet Warrior", 25);
 
-
-
+module.exports = { getMonsterStatsAtLevel };
