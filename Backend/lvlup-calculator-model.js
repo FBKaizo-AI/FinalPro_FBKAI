@@ -67,6 +67,6 @@ async function getMonsterStatsAtLevel(monsterName, level) {
 }
 
 // Test Call 
-getMonsterStatsAtLevel("Alpha The Magnet Warrior", 25);
+//getMonsterStatsAtLevel("Alpha The Magnet Warrior", 25);
 
 module.exports = { getMonsterStatsAtLevel };
