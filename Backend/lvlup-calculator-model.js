@@ -4,6 +4,7 @@ const Monster = require('../models/Monster'); //imports the monster model i defi
 
 const MONGO_URI = process.env.MARKELL_MONGO;
 
+// MongoDB connection and model def
 async function getMonsterStatsAtLevel(monsterName, level) {
     try {
         await mongoose.connect(MONGO_URI);
@@ -28,7 +29,7 @@ async function getMonsterStatsAtLevel(monsterName, level) {
             Speed: monster.Speed
         };
 
-        // Determine unlocked abilities
+        // Determine unlocked abilities based on the level and puts them in an array
         const unlockedAbilities = [];
 
         if (level >= monster["Ability 1 Unlock (Level)"]) unlockedAbilities.push(monster["Ability 1"]);
@@ -44,7 +45,7 @@ async function getMonsterStatsAtLevel(monsterName, level) {
         const specialEffect = level >= monster["Special Unlock (Level)"] && monster["Special Unlock (Level)"] !== -1
             ? `${monster["Special Name"]}: ${monster["Special Effect"]}`
             : "Locked";
-
+        // returns the result in the structure of the monster model
         const result = {
             MonsterName: monster["Monster Name"],
             Class: monster.Class,
