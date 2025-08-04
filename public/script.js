@@ -1,3 +1,4 @@
+const { connect } = require("mongoose");
 
 // --- Sample Monster Data (replace with real data as needed) ---
 const monsters = [
@@ -39,6 +40,11 @@ const monsters = [
     }
     // Add more monsters as needed
 ];
+
+connect('mongodb://localhost:3000/fbkaizo', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 // --- Monster Search Dropdown ---
 
