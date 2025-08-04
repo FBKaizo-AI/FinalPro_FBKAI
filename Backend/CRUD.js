@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-// const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Monster = require('./models/Monster'); // Importing the Monster model
+
 const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
@@ -51,6 +52,7 @@ const aiOutputSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 const AIOutput = mongoose.model('FBKaizo', aiOutputSchema, 'FBKaizo');
+
 
 // POST route
 app.post('/api/ai-output', async (req, res) => {
@@ -101,13 +103,6 @@ app.get("/", async (req, res) => {
   }
 });
 
- //makes a monster schema and model for ai response
-const monsterSchema = new mongoose.Schema({
-  name: String,
-  stats: String,
-  abilities: String,
-});
-const Monster = mongoose.model('Monster', monsterSchema, 'Monsters');
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
