@@ -40,12 +40,13 @@ const monsters = [
 ];
 
 // --- Monster Search Dropdown ---
+
 const searchInput = document.getElementById('monster-search-input');
 const dropdown = document.getElementById('monster-dropdown');
 const monsterCard = document.getElementById('monster-card');
 
-searchInput.addEventListener('input', function() {
-    const query = this.value.toLowerCase();
+function initializeMonsterSearch(query) {
+    query = query.toLowerCase();
     dropdown.innerHTML = '';
     if (!query) {
         dropdown.classList.remove('show');
@@ -67,6 +68,17 @@ searchInput.addEventListener('input', function() {
         dropdown.appendChild(li);
     });
     dropdown.classList.add('show');
+}
+
+searchInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent form submission if inside a form
+        initializeMonsterSearch(searchInput.value);
+    }
+});
+
+searchInput.addEventListener('input', function() {
+    initializeMonsterSearch(this.value);
 });
 
 document.addEventListener('click', function(e) {
