@@ -12,7 +12,6 @@ app.use(cors());
 app.use(express.json());
 
 //processing env variables (refer to blueprint provided)
-// const genAI = process.env.GEMINI_API_KEY; //may not need this line
 const MARKELL = process.env.MARKELL_MONGO;
 const DUSTIN = process.env.DUSTIN_MONGO;
 const JIYAH = process.env.JIYAH_MONGO;
@@ -25,7 +24,6 @@ mongoose.connect(DUSTIN, {
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Initialize Gemini
-// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);\
 const ai = new GoogleGenAI({apikey: process.env.GEMINI_API_KEY});
 
 //testing response
@@ -59,23 +57,23 @@ app.post('/api/ai-output', async (req, res) => {
   try {
     const { question } = req.body;
 
-    // Find monsters related to the query
+    // Find monsters related to the query using the Database
     const monsterMatches = await Monster.find({
       name: { $regex: question, $options: 'i' }
     }).limit(3);
 
-    // Build context for Gemini
+    // Build context for Gemini to find the matching monsters based on query
     let context = "Here is monster info from the database:\n";
     monsterMatches.forEach(mon => {
       context += `Name: ${mon.name}\nStats: ${mon.stats}\nAbilities: ${mon.abilities}\n\n`;
     });
     context += `User question: ${question}\nAI answer:`;
 
-    // giving the ai context to work with
+    // giving the ai context for their response
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(context);
     const answer = result.response.text();
-
+   // saves the response to the database
     const output = new AIOutput({ question, answer });
     await output.save();
     res.status(201).json(output);
