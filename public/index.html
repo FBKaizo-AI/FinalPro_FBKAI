@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBKaizo AI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header-bar">
+        <div class="header-left">
+            <a href="index.html" class="logo">FBKaizo AI</a>
+        </div>
+        <nav class="header-right">
+            <a href="index.html">Homepage</a>
+            <a href="#" class="disabled">Stat Graphs</a>
+            <a href="#" class="disabled">Orbs</a>
+        </nav>
+    </header>
+    <main class="main-content">
+        <aside class="monster-sidebar">
+            <div class="monster-search">
+                <input type="text" id="monster-search-input" placeholder="Search monsters..." autocomplete="off">
+                <ul id="monster-dropdown" class="dropdown-list"></ul>
+            </div>
+            <div id="monster-card" class="monster-card hidden">
+                <img id="monster-portrait" class="monster-portrait" src="" alt="Monster Portrait">
+                <h2 id="monster-name"></h2>
+                <div class="monster-fields-grid">
+                    <div class="monster-field"><span>Class:</span> <span id="monster-class"></span></div>
+                    <div class="monster-field"><span>HP:</span> <span id="monster-hp"></span></div>
+                    <div class="monster-field"><span>ATK:</span> <span id="monster-atk"></span></div>
+                    <div class="monster-field"><span>DEF:</span> <span id="monster-def"></span></div>
+                    <div class="monster-field"><span>AP:</span> <span id="monster-ap"></span></div>
+                    <div class="monster-field"><span>GT:</span> <span id="monster-gt"></span></div>
+                    <div class="monster-field"><span>Luck:</span> <span id="monster-luck"></span></div>
+                    <div class="monster-field"><span>Speed:</span> <span id="monster-speed"></span></div>
+                </div>
+                <div class="monster-field"><span>Battle Arts Effect:</span> <span id="monster-battle-art"></span></div>
+                <div class="monster-field"><span>Special Name:</span> <span id="monster-special-name"></span></div>
+                <div class="monster-field"><span>Special Description:</span> <span id="monster-special-desc"></span></div>
+                <div class="monster-field"><span>Ability 1:</span> <span id="monster-ability-1"></span></div>
+                <div class="monster-field"><span>Ability 2:</span> <span id="monster-ability-2"></span></div>
+                <div class="monster-field"><span>Ability 3:</span> <span id="monster-ability-3"></span></div>
+            </div>
+        </aside>
+        <section class="chat-section">
+            <div id="chat-window" class="chat-window"></div>
+            <form id="chat-form" class="chat-form">
+                <input type="text" id="chat-input" placeholder="Ask about monster stats, skills, or strategies..." autocomplete="off">
+                <button type="submit" id="chat-send-btn">&#9658;</button>
+            </form>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
