@@ -45,7 +45,7 @@ const searchInput = document.getElementById('monster-search-input');
 const dropdown = document.getElementById('monster-dropdown');
 const monsterCard = document.getElementById('monster-card');
 
-function initializeMonsterSearch(query) {
+function initializeMonsterSearch(query) { //jlc
     query = query.toLowerCase();
     dropdown.innerHTML = '';
     if (!query) {
@@ -73,8 +73,24 @@ function initializeMonsterSearch(query) {
 searchInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Prevent form submission if inside a form
-        initializeMonsterSearch(searchInput.value);
+        const query = this.value.trim().toLowerCase() //jlc
+        const exactMatchMonster = monsters.find((m) => m.name.toLowerCase() === query)
+        
+        if (exactMatchMonster) {
+      showMonsterCard(exactMatchMonster)
+      dropdown.classList.remove("show") // Hide dropdown
+      dropdown.innerHTML = "" // Clear dropdown content
+      searchInput.value = exactMatchMonster.name // Set input to exact name
+    } 
+      else {
+      // If no exact match on Enter, you might want to clear the dropdown
+      // or let the 'input' event handle showing suggestions if the query is partial.
+      // For now, we'll just hide the dropdown if no exact match was found.
+      dropdown.classList.remove("show")
+      dropdown.innerHTML = ""
     }
+    // jlc
+  }
 });
 
 searchInput.addEventListener('input', function() {
