@@ -1,3 +1,4 @@
+
 // --- Sample Monster Data (replace with real data as needed) ---
 const monsters = [
     {
@@ -162,6 +163,15 @@ function getBotResponse(userMsg) {
     }
     return "I'm FBKaizo AI! Ask me about any monster's stats, skills, or strategic information.";
 }
+
+ // frontend and backend connection
+ fetch('/api/ai-output', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ question: userMsg })
+});
 
 // Optionally, show a welcome message
 appendMessage('bot', "Welcome to FBKaizo AI! I'm your Yu-Gi-Oh! The Falsebound Kingdom assistant. Ask me about any monster's stats, skills, or strategic information. What would you like to know?");

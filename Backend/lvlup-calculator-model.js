@@ -24,7 +24,7 @@ async function getMonsterStatsAtLevel(monsterName, level) {
             HP: monster.HP + GT * (level - 1),
             ATK: monster.ATK + GT * (level - 1),
             DEF: monster.DEF + GT * (level - 1),
-            AP: monster.AP,  // Assuming AP doesn't scale
+            AP: monster.AP,  // Assuming AP, Luck, and Speed doesn't scale
             Luck: monster.Luck,
             Speed: monster.Speed
         };
