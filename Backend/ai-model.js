@@ -5,7 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-const { GoogleGenAI } = require('@google/genai');
+import { GoogleGenAI } from "@google/genai";
 const Monster = require('./monster-model'); // Mongoose model for Monsters
 
 const app = express();
@@ -55,16 +55,20 @@ app.post('/api/ai-output', async (req, res) => {
     context += `User question: ${question}\nAI answer:`;
 
     // Generate AI response
-    const model = ai.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    const result = await model.generateContent(context);
-    const answer = result.response.text();
+    const result = await ai.models.generateContent({
+  model: 'gemini-2.5-flash',
+  contents: context,
+   const: answer = result.text() // instead of result.response.text()
+
+});
+
 
     // Save response to MongoDB
     const output = new AIOutput({ question, answer });
     await output.save();
 
     res.status(201).json(output);
-  } catch (err) {
+ } catch (err) {
     if (err.message.includes('429')) {
       return res.status(429).json({
         error: 'Rate limit exceeded for gemini-2.5-flash. Try again later.',
