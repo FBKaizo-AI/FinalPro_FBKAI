@@ -1,5 +1,3 @@
-const { connect } = require("mongoose");
-
 // --- Sample Monster Data ---
 const monsters = [
     {
