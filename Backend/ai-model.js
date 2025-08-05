@@ -57,11 +57,10 @@ app.post('/api/ai-output', async (req, res) => {
     // Generate AI response
     const result = await ai.models.generateContent({
   model: 'gemini-2.5-flash',
-  contents: context,
-   const: answer = result.text() 
-
+  contents: context, 
 });
-
+ const answer = result.text();
+ res.json({ answer });
 
     // Save response to MongoDB
     const output = new AIOutput({ question, answer });
