@@ -707,6 +707,14 @@ const Monsters = [
         id: "Zombie Warrior",
         hex: "303050"
     }
+
+];
+
+const Marshalls = [
+    {
+        id: "Kaiba",
+        hex: "80FFFF"
+    }
 ];
 
 //converts hex to numerical RGB values
@@ -754,7 +762,7 @@ function findClosestMonsters(monsterName, monsters, topN = 15) {
     return closest;
 }
 
-findClosestMonsters("Blue-Eyes White Dragon (Azrael)", Monsters);
+findClosestMonsters("Ansatsu", Monsters);
 
 
 
