@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const Monster = require('./models/Monster'); // Importing the Monster model
+const Monster = require('./monster-model'); 
 
 const { GoogleGenAI } = require("@google/genai");
 

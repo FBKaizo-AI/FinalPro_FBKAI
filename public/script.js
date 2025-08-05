@@ -1,10 +1,10 @@
 const { connect } = require("mongoose");
 
-// --- Sample Monster Data (replace with real data as needed) ---
+// --- Sample Monster Data ---
 const monsters = [
     {
         name: "Blue-Eyes White Dragon",
-        portrait: "./assets/BEWD.png", // Example image
+        portrait: "./assets/BEWD.png",//<--Temporary porttrait
         class: "Dragon",
         hp: 1900,
         atk: 3000,
@@ -22,7 +22,7 @@ const monsters = [
     },
     {
         name: "Dark Magician",
-        portrait: "./assets/DM.png", // Example image
+        portrait: "./assets/DM.png",//<--Temporary portrait
         class: "Spellcaster",
         hp: 1200,
         atk: 2500,
@@ -41,18 +41,18 @@ const monsters = [
     // Add more monsters as needed
 ];
 
+//MongoDB Connection Backend related - could be removed from frontend if not needed here.-MS
 connect('mongodb://localhost:3000/fbkaizo', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-// --- Monster Search Dropdown ---
-
+//Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
 const dropdown = document.getElementById('monster-dropdown');
 const monsterCard = document.getElementById('monster-card');
 
-function initializeMonsterSearch(query) { //jlc
+function initializeMonsterSearch(query) {
     query = query.toLowerCase();
     dropdown.innerHTML = '';
     if (!query) {
@@ -79,25 +79,19 @@ function initializeMonsterSearch(query) { //jlc
 
 searchInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent form submission if inside a form
-        const query = this.value.trim().toLowerCase() //jlc
-        const exactMatchMonster = monsters.find((m) => m.name.toLowerCase() === query)
-        
+        event.preventDefault();
+        const query = this.value.trim().toLowerCase();
+        const exactMatchMonster = monsters.find((m) => m.name.toLowerCase() === query);
         if (exactMatchMonster) {
-      showMonsterCard(exactMatchMonster)
-      dropdown.classList.remove("show") // Hide dropdown
-      dropdown.innerHTML = "" // Clear dropdown content
-      searchInput.value = exactMatchMonster.name // Set input to exact name
-    } 
-      else {
-      // If no exact match on Enter, you might want to clear the dropdown
-      // or let the 'input' event handle showing suggestions if the query is partial.
-      // For now, we'll just hide the dropdown if no exact match was found.
-      dropdown.classList.remove("show")
-      dropdown.innerHTML = ""
+            showMonsterCard(exactMatchMonster);
+            dropdown.classList.remove("show");
+            dropdown.innerHTML = "";
+            searchInput.value = exactMatchMonster.name;
+        } else {
+            dropdown.classList.remove("show");
+            dropdown.innerHTML = "";
+        }
     }
-    // jlc
-  }
 });
 
 searchInput.addEventListener('input', function() {
@@ -147,37 +141,51 @@ function appendMessage(sender, text) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-chatForm.addEventListener('submit', function(e) {
+
+// Replaced placeholder AI logic with real fetch POST request to backend API.-MS
+chatForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const userMsg = chatInput.value.trim();
     if (!userMsg) return;
-    appendMessage('user', userMsg);
+
+    appendMessage('user', userMsg);  // Show user message
     chatInput.value = '';
-    // Simulate AI response (replace with real API call)
-    setTimeout(() => {
-        appendMessage('bot', getBotResponse(userMsg));
-    }, 700);
+
+    // ADDED: Show temporary "Thinking..." message while waiting for AI response.-MS
+    appendMessage('bot', 'Thinking...');
+
+    try {
+        // ADDED: Send user's question to backend /api/ai-output using Fetch API.-MS
+        const response = await fetch('http://localhost:3000/api/ai-output', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ question: userMsg })
+        });
+
+        const data = await response.json();
+
+        // ADDED: Remove the "Thinking..." message after receiving the response.
+        const loadingMessages = document.querySelectorAll('.bot');
+        if (loadingMessages.length > 0) {
+            chatWindow.removeChild(loadingMessages[loadingMessages.length - 1].parentNode);
+        }
+
+        // ADDED: If response is OK, display AI answer.
+        if (response.ok) {
+            appendMessage('bot', data.answer);
+        } else {
+            appendMessage('bot', `Error: ${data.error || 'Failed to get AI response'}`);
+        }
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        appendMessage('bot', 'Error connecting to the server.');
+    }
 });
 
-function getBotResponse(userMsg) {
-    // Placeholder logic for demo
-    if (userMsg.toLowerCase().includes('blue-eyes')) {
-        return "Blue-Eyes White Dragon is a powerful dragon with 3000 ATK and 2500 DEF. Would you like to know more?";
-    }
-    if (userMsg.toLowerCase().includes('dark magician')) {
-        return "Dark Magician is a classic spellcaster with 2500 ATK and 2100 DEF. Need more details?";
-    }
-    return "I'm FBKaizo AI! Ask me about any monster's stats, skills, or strategic information.";
-}
+// --- REMOVED: Removed old static getBotResponse() function ---
 
- // frontend and backend connection
- fetch('/api/ai-output', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ question: userMsg })
-});
-
-// Optionally, show a welcome message
-appendMessage('bot', "Welcome to FBKaizo AI! I'm your Yu-Gi-Oh! The Falsebound Kingdom assistant. Ask me about any monster's stats, skills, or strategic information. What would you like to know?");
+// --- Welcome Message (Kept) ---
+appendMessage('bot', "Welcome to FBKaizo AI! I'm your Yu-Gi-Oh! The Falsebound Kingdom assistant. Ask me about any monster's stats, skills, or strategic information.");
