@@ -58,7 +58,7 @@ app.post('/api/ai-output', async (req, res) => {
     const result = await ai.models.generateContent({
   model: 'gemini-2.5-flash',
   contents: context,
-   const: answer = result.text() // instead of result.response.text()
+   const: answer = result.text() 
 
 });
 
