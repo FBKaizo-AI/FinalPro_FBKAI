@@ -39,12 +39,6 @@ const monsters = [
     // Add more monsters as needed
 ];
 
-//MongoDB Connection Backend related - could be removed from frontend if not needed here.-MS
-connect('mongodb://localhost:3000/fbkaizo', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
 const dropdown = document.getElementById('monster-dropdown');
@@ -149,11 +143,11 @@ chatForm.addEventListener('submit', async function(e) {
     appendMessage('user', userMsg);  // Show user message
     chatInput.value = '';
 
-    // ADDED: Show temporary "Thinking..." message while waiting for AI response.-MS
     appendMessage('bot', 'Thinking...');
 
     try {
-        // ADDED: Send user's question to backend /api/ai-output using Fetch API.-MS
+        console.log('Sending to backend:', userMsg);
+
         const response = await fetch('http://localhost:3000/api/ai-output', {
             method: 'POST',
             headers: {
@@ -162,15 +156,19 @@ chatForm.addEventListener('submit', async function(e) {
             body: JSON.stringify({ question: userMsg })
         });
 
+        // Log the raw response object
+        console.log('Raw fetch response:', response);
+
         const data = await response.json();
 
-        // ADDED: Remove the "Thinking..." message after receiving the response.
+        console.log('Parsed backend response:', data);
+
+        // Remove the "Thinking..." message
         const loadingMessages = document.querySelectorAll('.bot');
         if (loadingMessages.length > 0) {
             chatWindow.removeChild(loadingMessages[loadingMessages.length - 1].parentNode);
         }
 
-        // ADDED: If response is OK, display AI answer.
         if (response.ok) {
             appendMessage('bot', data.answer);
         } else {
@@ -182,8 +180,6 @@ chatForm.addEventListener('submit', async function(e) {
         appendMessage('bot', 'Error connecting to the server.');
     }
 });
-
-// --- REMOVED: Removed old static getBotResponse() function ---
 
 // --- Welcome Message (Kept) ---
 appendMessage('bot', "Welcome to FBKaizo AI! I'm your Yu-Gi-Oh! The Falsebound Kingdom assistant. Ask me about any monster's stats, skills, or strategic information.");

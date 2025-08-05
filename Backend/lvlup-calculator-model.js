@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Monster = require('./monster-model.js'); //imports the monster model i defined from DB
-
+const express = require('express');
 const MONGO_URI = process.env.MARKELL_MONGO;
 
 // MongoDB connection and model def
