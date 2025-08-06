@@ -5,7 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-import { GoogleGenAI } from "@google/genai";
+const { GoogleGenAI } = require('@google/genai');
 const Monster = require('./monster-model'); // Mongoose model for Monsters
 
 const app = express();
@@ -27,7 +27,7 @@ mongoose.connect(MONGO_URI)
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // Initialize Gemini AI with API Key
-const ai = new GoogleGenAI({ apikey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // Mongoose Schema to store AI responses
 const aiOutputSchema = new mongoose.Schema({
@@ -55,12 +55,12 @@ app.post('/api/ai-output', async (req, res) => {
     context += `User question: ${question}\nAI answer:`;
 
     // Generate AI response
-    const result = await ai.models.generateContent({
+const result = await ai.models.generateContent({
   model: 'gemini-2.5-flash',
-  contents: context, 
+  contents: [{ role: 'user', parts: [{ text: context }] }]
 });
- const answer = result.text();
- res.json({ answer });
+const answer = result.candidates?.[0]?.content?.parts?.[0]?.text || "No answer generated.";
+    res.json({ answer });
 
     // Save response to MongoDB
     const output = new AIOutput({ question, answer });
