@@ -13,13 +13,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
+
 // Serve frontend static files from /public
 app.use(express.static(path.join(__dirname, '../public')));
+
+
+
 
 // helps prevent server from crashing from unhandled rejections outside of try/catch
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection:', reason);
 });
+
+
+
 
 // limits users to rates based on IP
 const rateLimit = require('express-rate-limit');
@@ -29,10 +38,16 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+
+
+
 // handles special characters so malicious code can't be entered
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+
+
 // handles more natural sentences for NLP
 function extractMonsterName(question) {
   // Very basic: look for "for X" or "of X"
@@ -41,6 +56,8 @@ function extractMonsterName(question) {
   return question;
 }
 
+
+
 // MongoDB Connection, since we have no specific URI variable
 const MONGO_URI = process.env.DUSTIN_MONGO || process.env.MARKELL_MONGO || process.env.JIYAH_MONGO;
 if (!MONGO_URI) {
@@ -48,21 +65,19 @@ if (!MONGO_URI) {
   process.exit(1); // Stops server if no URI is set
 }
 
+
+// connecting to mongodb
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+
+
 // Initialize Gemini AI with API Key
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// Mongoose Schema to store AI responses
-// const aiOutputSchema = new mongoose.Schema({
-//   question: String,
-//   answer: String,
-//   createdAt: { type: Date, default: Date.now }
-// });
-// const AIOutput = mongoose.model('FBKaizo', aiOutputSchema, 'FBKaizo'); 
-// ^^^ COMMENTED OUT SINCE IT ISN'T USED RN
+
+
 
 // POST endpoint: Receives a user question, queries Gemini AI, saves response
 app.post('/api/ai-output', async (req, res) => {
@@ -90,16 +105,16 @@ app.post('/api/ai-output', async (req, res) => {
 
 
 
-    // Search for matching monsters in DB // COMMENTING OUT BUT KEEPING JUST IN CASE
-    // const monsterMatches = await Monster.find({
-    //   "Monster Name": { $regex: question, $options: 'i' }
-    // }).limit(3);
+ 
+
 
     // returns this if monster name can't be found
     if (monsterMatches.length === 0) {
       console.log(results, monsterMatches, question); // COMMENT THIS OUT WHEN DONE TESTING
       return res.status(404).json({ answer: "No matching monster found in the database." });
     }
+
+
 
 
 
@@ -118,10 +133,9 @@ app.post('/api/ai-output', async (req, res) => {
     });
     context += `User question: ${question}\nAI answer:`;
 
-    // const MAX_CONTEXT_LENGTH = 4000;
-    // if (context.length > MAX_CONTEXT_LENGTH) {
-    //   context = context.slice(0, MAX_CONTEXT_LENGTH);
-    // }
+
+
+
 
     // Generate AI response
     const result = await ai.models.generateContent({
@@ -131,9 +145,9 @@ app.post('/api/ai-output', async (req, res) => {
     const answer = result.candidates?.[0]?.content?.parts?.[0]?.text || "No answer generated.";
     res.status(200).json({ answer });
 
-    // Save response to MongoDB //ALERT: THIS WAS PUTTING ALL ANSWERS IN OUR FBKAIZO COLLECTION
-    // const output = new AIOutput({ question, answer });
-    // await output.save();
+
+
+
 
  } catch (err) {
     if (err.message.includes('429')) {
@@ -146,20 +160,16 @@ app.post('/api/ai-output', async (req, res) => {
   }
 });
 
-// GET endpoint: Returns all saved AI responses // COMMENTED OUT BECAUSE WE AREN'T SAVING RESPONSES RN
-// app.get('/api/ai-history', async (req, res) => {
-//   try {
-//     const data = await AIOutput.find();
-//     res.status(200).json(data);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+
+
 
 // Catch-all route: Serve index.html for any unmatched route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
+
+
+
 
 // Start Express server
 const PORT = process.env.PORT || 3000;
