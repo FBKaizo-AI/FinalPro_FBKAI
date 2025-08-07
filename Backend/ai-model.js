@@ -60,13 +60,13 @@ const result = await ai.models.generateContent({
   contents: [{ role: 'user', parts: [{ text: context }] }]
 });
 const answer = result.candidates?.[0]?.content?.parts?.[0]?.text || "No answer generated.";
-    res.json({ answer });
+    //res.json({ answer }); //Could be th issue
 
     // Save response to MongoDB
     const output = new AIOutput({ question, answer });
     await output.save();
 
-    res.status(201).json(output);
+    res.status(201).json(output); // Also this
  } catch (err) {
     if (err.message.includes('429')) {
       return res.status(429).json({
