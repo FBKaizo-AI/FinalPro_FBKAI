@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FBKaizo Calc</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header-bar">
+        <div class="header-left">
+            <a href="index.html" class="logo">FBKaizo AI</a>
+        </div>
+        <div class="header-right">
+            <a href="index.html">Home</a>
+            <a href="calc.html">Calculator</a>
+            <a href="orbs.html">Orbs</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="monster-sidebar">
+            <!-- Filler div for now, can reuse card search/calc from home page -->
+            <div class="monster-search">
+                <input type="text" id="monster-search-input" placeholder="Search Monster...">
+                <ul id="monster-dropdown" class="dropdown-list"></ul>
+            </div>
+            <div id="monster-card" class="monster-card hidden">
+                <!-- Monster card content here -->
+            </div>
+        </div>
+        <div class="calc-graph-section">
+            <!-- Level Up Line Graph Displayed (stretch goal) -->
+            <h2 style="color:#ffb300;">Level Up Graph</h2>
+            <div id="levelup-graph" style="height:350px; background:rgba(255,255,255,0.07); border-radius:12px; margin-top:1rem; display:flex; align-items:center; justify-content:center;">
+                <span style="color:#fff;">Graph will be displayed here</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

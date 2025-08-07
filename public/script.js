@@ -37,6 +37,8 @@ const monsters = [
         ability3: "Defensive Magic (1)"
     }
     // Add more monsters as needed
+
+    //
 ];
 
 //Monster Search Dropdown
