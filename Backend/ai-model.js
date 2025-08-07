@@ -131,7 +131,9 @@ app.post('/api/ai-output', async (req, res) => {
       context += `Ability 2: ${mon["Ability 2"]}\n`;
       context += `Ability 3: ${mon["Ability 3"]}\n\n`;
     });
-    context += `User question: ${question}\nAI answer:`;
+    //adjusted context to be helpful while still being accurate with DB data.
+    context += `\n\nUsing the monster info above, answer the following question. Be detailed, strategic, and creative. You may suggest combos, team builds, or tactics if relevant.\n\nUser question: ${question}\n\nAI answer:`;
+
 
 
 
