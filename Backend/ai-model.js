@@ -104,18 +104,11 @@ app.post('/api/ai-output', async (req, res) => {
     }
 
 
-
- 
-
-
     // returns this if monster name can't be found
     if (monsterMatches.length === 0) {
       console.log(results, monsterMatches, question); // COMMENT THIS OUT WHEN DONE TESTING
       return res.status(404).json({ answer: "No matching monster found in the database." });
     }
-
-
-
 
 
     // Build context for Gemini API
@@ -132,9 +125,14 @@ app.post('/api/ai-output', async (req, res) => {
       context += `Ability 3: ${mon["Ability 3"]}\n\n`;
     });
     //adjusted context to be helpful while still being accurate with DB data.
-    context += `\n\nUsing the monster info above, answer the following question. Be detailed, strategic, and creative. You may suggest combos, team builds, or tactics if relevant.\n\nUser question: ${question}\n\nAI answer:`;
+    context += `Using the monster info above, respond to the user's question with relevant data for an accurate answer. 
+                Be detailed, but format your response in clear sections using Markdown. 
+                Use bullet points, bold for stat names, and short paragraphs under each section. 
+                Do not output giant blocks of text — break them up with line breaks.
 
+                User question: ${question}
 
+                AI answer:`;
 
 
 

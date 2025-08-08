@@ -183,5 +183,5 @@ chatForm.addEventListener('submit', async function(e) {
     }
 });
 
-// --- Welcome Message (Kept) ---
+// --- Welcome Message ---
 appendMessage('bot', "Welcome to FBKaizo AI! I'm your Yu-Gi-Oh! The Falsebound Kingdom assistant. Ask me about any monster's stats, skills, or strategic information.");
