@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,14 +25,18 @@
             </div>
             <div id="monster-card" class="monster-card hidden">
                 <img id="monster-portrait" class="monster-portrait" src="" alt="Monster Portrait">
+                <div id="level-calc-container" class="level-calc-container hidden">
+                    <label for="level-input" class="level-label">Level:</label>
+                    <input type="number" id="level-input" class="level-input" min="1" max="99" value="1">
+                </div>
                 <h2 id="monster-name"></h2>
                 <div class="monster-fields-grid">
                     <div class="monster-field"><span>Class:</span> <span id="monster-class"></span></div>
+                    <div class="monster-field"><span>GT:</span> <span id="monster-gt"></span></div>
                     <div class="monster-field"><span>HP:</span> <span id="monster-hp"></span></div>
+                    <div class="monster-field"><span>AP:</span> <span id="monster-ap"></span></div>
                     <div class="monster-field"><span>ATK:</span> <span id="monster-atk"></span></div>
                     <div class="monster-field"><span>DEF:</span> <span id="monster-def"></span></div>
-                    <div class="monster-field"><span>AP:</span> <span id="monster-ap"></span></div>
-                    <div class="monster-field"><span>GT:</span> <span id="monster-gt"></span></div>
                     <div class="monster-field"><span>Luck:</span> <span id="monster-luck"></span></div>
                     <div class="monster-field"><span>Speed:</span> <span id="monster-speed"></span></div>
                 </div>
@@ -48,12 +51,13 @@
         <section class="chat-section">
             <div id="chat-window" class="chat-window"></div>
             <form id="chat-form" class="chat-form">
-                <!-- find a way to make it to where special characters can't be input in input fields-->
                 <input type="text" id="chat-input" placeholder="Ask about monster stats, skills, or strategies..." autocomplete="off">
                 <button type="submit" id="chat-send-btn">&#9658;</button>
             </form>
         </section>
     </main>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="lvl_calc.js"></script>
+    <script type="module" src="hex_calc.js"></script> <!--may not be needed here-->
 </body>
 </html>
