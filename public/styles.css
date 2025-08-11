@@ -316,3 +316,25 @@ body {
     }
 }
 }
+
+.level-calc-container {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+}
+.level-label {
+    color: #ffb300;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.level-input {
+    width: 60px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 2px solid #ffb300;
+    font-size: 1em;
+    background: #2a237c;
+    color: #ffb300;
+}
