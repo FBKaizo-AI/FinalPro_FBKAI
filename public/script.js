@@ -1,45 +1,4 @@
-// --- Sample Monster Data ---
-const monsters = [
-    {
-        name: "Blue-Eyes White Dragon",
-        portrait: "./assets/BEWD.png",//<--Temporary porttrait
-        class: "Dragon",
-        hp: 1900,
-        atk: 3000,
-        def: 2500,
-        ap: 2,
-        gt: 2,
-        luck: 5,
-        speed: 180,
-        battleArt: "Dragon-Killer 2 (20)",
-        specialName: "-",
-        specialDesc: "-",
-        ability1: "Mountain Adept (1)",
-        ability2: "Castle Adept (15)",
-        ability3: "Armor (35)"
-    },
-    {
-        name: "Dark Magician",
-        portrait: "./assets/DM.png",//<--Temporary portrait
-        class: "Spellcaster",
-        hp: 1200,
-        atk: 2500,
-        def: 2100,
-        ap: 2,
-        gt: 18,
-        luck: 10,
-        speed: 90,
-        battleArt: "-",
-        specialName: "Dark Burning Magic (40)",
-        specialDesc: "Combo Attack W/ DMG",
-        ability1: "Night Adept (1)",
-        ability2: "Offensive Magic (1)",
-        ability3: "Defensive Magic (1)"
-    }
-    // Add more monsters as needed
-
-    //
-];
+import { Monsters } from "./assets/monsters.js";
 
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
@@ -53,18 +12,18 @@ function initializeMonsterSearch(query) {
         dropdown.classList.remove('show');
         return;
     }
-    const filtered = monsters.filter(m => m.name.toLowerCase().includes(query));
+    const filtered = Monsters.filter(m => m.monsterName.toLowerCase().includes(query));
     if (filtered.length === 0) {
         dropdown.classList.remove('show');
         return;
     }
     filtered.forEach(monster => {
         const li = document.createElement('li');
-        li.textContent = monster.name;
+        li.textContent = monster.monsterName;
         li.addEventListener('click', () => {
             showMonsterCard(monster);
             dropdown.classList.remove('show');
-            searchInput.value = monster.name;
+            searchInput.value = monster.monsterName;
         });
         dropdown.appendChild(li);
     });
@@ -75,12 +34,12 @@ searchInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
         const query = this.value.trim().toLowerCase();
-        const exactMatchMonster = monsters.find((m) => m.name.toLowerCase() === query);
+        const exactMatchMonster = Monsters.find((m) => m.monsterName.toLowerCase() === query);
         if (exactMatchMonster) {
             showMonsterCard(exactMatchMonster);
             dropdown.classList.remove("show");
             dropdown.innerHTML = "";
-            searchInput.value = exactMatchMonster.name;
+            searchInput.value = exactMatchMonster.monsterName;
         } else {
             dropdown.classList.remove("show");
             dropdown.innerHTML = "";
@@ -98,26 +57,39 @@ document.addEventListener('click', function(e) {
     }
 });
 
+
+
+function displayValue(val) {
+    if (val === -1 || val === "No Effect") return "-";
+    return val;
+}
+
 function showMonsterCard(monster) {
     document.getElementById('monster-portrait').src = monster.portrait;
-    document.getElementById('monster-portrait').alt = monster.name + ' portrait';
-    document.getElementById('monster-name').textContent = monster.name;
+    document.getElementById('monster-portrait').alt = monster.monsterName + ' portrait';
+    document.getElementById('monster-name').textContent = monster.monsterName;
     document.getElementById('monster-class').textContent = monster.class;
-    document.getElementById('monster-hp').textContent = monster.hp;
-    document.getElementById('monster-atk').textContent = monster.atk;
-    document.getElementById('monster-def').textContent = monster.def;
-    document.getElementById('monster-ap').textContent = monster.ap;
-    document.getElementById('monster-gt').textContent = monster.gt;
-    document.getElementById('monster-luck').textContent = monster.luck;
-    document.getElementById('monster-speed').textContent = monster.speed;
-    document.getElementById('monster-battle-art').textContent = monster.battleArt;
-    document.getElementById('monster-special-name').textContent = monster.specialName;
-    document.getElementById('monster-special-desc').textContent = monster.specialDesc;
-    document.getElementById('monster-ability-1').textContent = monster.ability1;
-    document.getElementById('monster-ability-2').textContent = monster.ability2;
-    document.getElementById('monster-ability-3').textContent = monster.ability3;
+    document.getElementById('monster-gt').textContent = displayValue(monster.gt);
+    document.getElementById('monster-hp').textContent = displayValue(monster.hp);
+    document.getElementById('monster-ap').textContent = displayValue(monster.ap);
+    document.getElementById('monster-atk').textContent = displayValue(monster.atk);
+    document.getElementById('monster-def').textContent = displayValue(monster.def);
+    document.getElementById('monster-luck').textContent = displayValue(monster.luck);
+    document.getElementById('monster-speed').textContent = displayValue(monster.speed);
+    document.getElementById('monster-battle-art').textContent = 
+        `${displayValue(monster.attackEffect)} (${displayValue(monster.attackEffectUnlockLvl)})`;
+    document.getElementById('monster-special-name').textContent = displayValue(monster.specialName);
+    document.getElementById('monster-special-desc').textContent = displayValue(monster.specialEffect);
+    document.getElementById('monster-ability-1').textContent = 
+        `${displayValue(monster.ability1)} (${displayValue(monster.ability1UnlockLvl)})`;
+    document.getElementById('monster-ability-2').textContent = 
+        `${displayValue(monster.ability2)} (${displayValue(monster.ability2UnlockLvl)})`;
+    document.getElementById('monster-ability-3').textContent = 
+        `${displayValue(monster.ability3)} (${displayValue(monster.ability3UnlockLvl)})`;
     monsterCard.classList.remove('hidden');
 }
+
+
 
 // --- Chat Functionality ---
 const chatWindow = document.getElementById('chat-window');
