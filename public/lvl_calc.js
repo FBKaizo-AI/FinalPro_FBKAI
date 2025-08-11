@@ -127,10 +127,10 @@ const Growths = {
 
 // base function for calculations
 function calc(monster, level) {
-    Hp = monster.hp + hpCalc(monster.gt, level)
-    Atk = monster.atk + atkDefCalc(monster.gt, level)
-    Def = monster.def + atkDefCalc(monster.gt, level)
-    Ap = monster.ap + apCalc(monster.ap, level)
+    let Hp = monster.hp + hpCalc(monster.gt, level)
+    let Atk = monster.atk + atkDefCalc(monster.gt, level)
+    let Def = monster.def + atkDefCalc(monster.gt, level)
+    let Ap = monster.ap + apCalc(monster.gt, level)
 
     
     let stats = []
@@ -180,7 +180,9 @@ function apCalc(GT, level) {
     return sum;
 }
 
-
-//calculator inputs (Monster, Level)
+// below comment was used in testing
+// calculator inputs (Monster, Level)
 // result = calc(BEWD, 80);
 // console.log(`Hp: ${result[0]}, Atk: ${result[1]}, Def: ${result[2]}, AP: ${result[3]}`);
+
+export {calc};

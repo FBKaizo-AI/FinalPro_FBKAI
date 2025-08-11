@@ -25,6 +25,10 @@
             </div>
             <div id="monster-card" class="monster-card hidden">
                 <img id="monster-portrait" class="monster-portrait" src="" alt="Monster Portrait">
+                <div id="level-calc-container" class="level-calc-container hidden">
+                    <label for="level-input" class="level-label">Level:</label>
+                    <input type="number" id="level-input" class="level-input" min="1" max="99" value="1">
+                </div>
                 <h2 id="monster-name"></h2>
                 <div class="monster-fields-grid">
                     <div class="monster-field"><span>Class:</span> <span id="monster-class"></span></div>
@@ -47,7 +51,6 @@
         <section class="chat-section">
             <div id="chat-window" class="chat-window"></div>
             <form id="chat-form" class="chat-form">
-                <!-- find a way to make it to where special characters can't be input in input fields-->
                 <input type="text" id="chat-input" placeholder="Ask about monster stats, skills, or strategies..." autocomplete="off">
                 <button type="submit" id="chat-send-btn">&#9658;</button>
             </form>

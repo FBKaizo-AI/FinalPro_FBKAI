@@ -1,4 +1,5 @@
 import { Monsters } from "./assets/monsters.js";
+import { calc } from "./lvl_calc.js";
 
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
@@ -87,6 +88,31 @@ function showMonsterCard(monster) {
     document.getElementById('monster-ability-3').textContent = 
         `${displayValue(monster.ability3)} (${displayValue(monster.ability3UnlockLvl)})`;
     monsterCard.classList.remove('hidden');
+
+
+    document.getElementById('level-calc-container').classList.remove('hidden');
+
+    // Set default level to 1
+    const levelInput = document.getElementById('level-input');
+    levelInput.value = 1;
+    updateStatsWithCalc(monster, 1);
+
+    // Add event listener for level changes
+    levelInput.oninput = function() {
+        let lvl = parseInt(levelInput.value, 10);
+        if (isNaN(lvl) || lvl < 1) lvl = 1;
+        if (lvl > 99) lvl = 99;
+        updateStatsWithCalc(monster, lvl);
+    };
+}
+
+function updateStatsWithCalc(monster, level) {
+    // Use your calc function to get new stats
+    const [Hp, Atk, Def, Ap] = calc(monster, level);
+    document.getElementById('monster-hp').textContent = displayValue(Hp);
+    document.getElementById('monster-atk').textContent = displayValue(Atk);
+    document.getElementById('monster-def').textContent = displayValue(Def);
+    document.getElementById('monster-ap').textContent = displayValue(Ap);
 }
 
 
