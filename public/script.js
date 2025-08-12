@@ -1,5 +1,6 @@
 import { Monsters } from "./assets/monsters.js";
 import { calc } from "./lvl_calc.js";
+import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
 
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
@@ -58,8 +59,6 @@ document.addEventListener('click', function(e) {
     }
 });
 
-
-
 function displayValue(val) {
     if (val === -1 || val === "No Effect") return "-";
     return val;
@@ -89,7 +88,6 @@ function showMonsterCard(monster) {
         `${displayValue(monster.ability3)} (${displayValue(monster.ability3UnlockLvl)})`;
     monsterCard.classList.remove('hidden');
 
-
     document.getElementById('level-calc-container').classList.remove('hidden');
 
     // Set default level to 1
@@ -115,26 +113,30 @@ function updateStatsWithCalc(monster, level) {
     document.getElementById('monster-ap').textContent = displayValue(Ap);
 }
 
-
-
 // --- Chat Functionality ---
 const chatWindow = document.getElementById('chat-window');
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 
+// Updated appendMessage with Markdown for bot messages
 function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'chat-message ' + sender;
+
     const bubble = document.createElement('div');
     bubble.className = 'message-bubble ' + sender;
-    bubble.textContent = text;
+
+    if (sender === 'bot') {
+        bubble.innerHTML = marked(text); // parse markdown to HTML
+    } else {
+        bubble.textContent = text; // plain text for user
+    }
+
     msgDiv.appendChild(bubble);
     chatWindow.appendChild(msgDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-
-// Replaced placeholder AI logic with real fetch POST request to backend API.-MS
 chatForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const userMsg = chatInput.value.trim();
@@ -156,11 +158,7 @@ chatForm.addEventListener('submit', async function(e) {
             body: JSON.stringify({ question: userMsg })
         });
 
-        // Log the raw response object
-        console.log('Raw fetch response:', response);
-
         const data = await response.json();
-
         console.log('Parsed backend response:', data);
 
         // Remove the "Thinking..." message
@@ -170,7 +168,7 @@ chatForm.addEventListener('submit', async function(e) {
         }
 
         if (response.ok) {
-            appendMessage('bot', data.answer);
+            appendMessage('bot', data.answer); // Markdown handled inside appendMessage()
         } else {
             appendMessage('bot', `Error: ${data.error || 'Failed to get AI response'}`);
         }
