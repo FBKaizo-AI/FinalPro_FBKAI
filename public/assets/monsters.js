@@ -4600,3 +4600,9 @@ export const Monsters = [{
   hex: "303050",
   id: 129
 }]
+
+// jlc created separate arrays for the Orbs.html page and used slice to get the top 5, 10, and 15 monsters
+
+export const top5Monsters = Monsters.slice(0, 5);
+export const top10Monsters = Monsters.slice(0,10);
+export const top15Monsters = Monsters.slice(0,15);
