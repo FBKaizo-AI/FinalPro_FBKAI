@@ -32,7 +32,7 @@ Whether you're a casual player wanting to know what a monster does, or a competi
 
 Data was sourced from the *Yu-Gi-Oh! FBKaizo* community spreadsheet:
 
-📎 [Monster List (FBKaizo) — Google Sheets](https://codeschoolcourses.slack.com/files/U0891493PA6/F095J6368P6/monster_levelup_calculator_-_monster_list__fbkaizo__clean_.csv)
+📎 [Monster List (FBKaizo) — Google Sheets](https://docs.google.com/spreadsheets/d/1II05Gkfgh4mkVTZ2ozaMvYJdfJ-Wq7xkwkL0L1BRmC4/edit?usp=sharing)
 
 ---
 
