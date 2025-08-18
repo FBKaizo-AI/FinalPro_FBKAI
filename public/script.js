@@ -21,14 +21,7 @@ function renderMonsters(monsterArray) {
     });
 }
 
-renderMonsters(Monsters);
-
-filter.addEventListener('change', () => {
-    if (filter.value === 'top5') renderMonsters(top5Monsters);
-    else if (filter.value === 'top 10') renderMonsters(top10Monsters);
-    else if (filter.value === 'top15') renderMonsters(top15Monsters);
-    else renderMonsters(Monsters);
-});
+renderMonsters(monsters);
 
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
