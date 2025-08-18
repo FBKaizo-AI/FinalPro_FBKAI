@@ -35,11 +35,11 @@ function findClosestMonsters(monsterName, monsters, topN = 15) {
         .filter(m => m.id !== target.id)
         .map(m => {
             const rgb = hexToRGB(m.hex); // calls hex function
-            if (!rgb) return { id: m.id, diff: Infinity };
+            if (!rgb) return { Name: m.monsterName, diff: Infinity };
             const diff = Math.abs(targetRGB[0] - rgb[0]) +
                          Math.abs(targetRGB[1] - rgb[1]) +
                          Math.abs(targetRGB[2] - rgb[2]);
-            return { id: m.id, diff };
+            return { Name: m.monsterName, diff };
         });
 
     // Sort by ascending and get top 15
