@@ -1,27 +1,6 @@
 import { Monsters } from "./assets/monsters.js";
 import { calc } from "./lvl_calc.js";
 import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
-import { Monsters, top5Monsters, top10Monsters, top15Monsters } from "./assets/monsters.js";
-
-// --- Monster Grid Functionality --- jlc
-// import the arrays and render the grid bases on the filte
-const grid = document.getElementById('monster-grid');
-const filter = document.getElementById('monster-filter');
-
-function renderMonsters(monsterArray) {
-    grid.innerHTML = '';
-    monsterArray.forEach(monster => {
-        const card =document.createElement('div');
-        card.className = 'monster-card';
-        card.innerHTML = `
-            <img src="${monster.portrait}" alt="${monster.monsterName} portrait" class="monster-portrait">
-            <div class="monster-name">${monster.name}</div>
-            `;
-            grid.appendChild(card);
-    });
-}
-
-renderMonsters(monsters);
 
 //Monster Search Dropdown
 const searchInput = document.getElementById('monster-search-input');
