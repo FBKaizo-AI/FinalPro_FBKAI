@@ -4,7 +4,7 @@ import { marked } from 'https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js';
 import { Monsters, top5Monsters, top10Monsters, top15Monsters } from "./assets/monsters.js";
 
 // --- Monster Grid Functionality --- jlc
-// import the arrays and render the grid bases on the filter
+// import the arrays and render the grid bases on the filte
 const grid = document.getElementById('monster-grid');
 const filter = document.getElementById('monster-filter');
 
