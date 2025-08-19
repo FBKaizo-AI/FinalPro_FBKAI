@@ -109,7 +109,7 @@ body {
     margin-bottom: 1.5rem;
     position: relative;
 }
-#monster-search-input {
+#monster-search-input, .monster-search-input {
     width: 100%;
     padding: 0.56rem 0.8rem;
     border-radius: 6px;
@@ -315,6 +315,80 @@ body {
         padding: 0.96rem 0.4rem 0.96rem 0.4rem;
     }
 }
+}
+
+body.lvl-calc, html {
+    height: 100%;
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+body.lvl-calc .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    padding-bottom: 32px;
+}
+
+body.lvl-calc .cards-row {
+    height: 600px;
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.cards-row .card-holder {
+    width: 500px;
+    height: 550px;
+}
+
+body.lvl-calc .individual-graphs-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+body.lvl-calc .stat-graph {
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    height: 200px;
+    max-height: 200px;
+    margin-left: 70px;
+    margin-right: 80px;
+}
+
+body.lvl-calc .comparison-graphs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 28px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 100vw;
+    height: 900px;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+body.lvl-calc .comparison-graphs-grid canvas {
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    height: 110px;
+    max-height: 200px;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto;
 }
 
 .level-calc-container {

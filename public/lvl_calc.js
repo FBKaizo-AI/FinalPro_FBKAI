@@ -135,7 +135,7 @@ function calc(monster, level) {
     
     let stats = []
     stats.push(Math.ceil(Hp), Atk, Def, Ap); //the math.ceil is added due to index 17 of Growths having 11.5 as a growth
-    console.log(stats)
+    // console.log(stats)
     return stats;
 }
 
@@ -185,4 +185,4 @@ function apCalc(GT, level) {
 // result = calc(BEWD, 80);
 // console.log(`Hp: ${result[0]}, Atk: ${result[1]}, Def: ${result[2]}, AP: ${result[3]}`);
 
-export {calc};
+export {calc, hpCalc, atkDefCalc, apCalc};

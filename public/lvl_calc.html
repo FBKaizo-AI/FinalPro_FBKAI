@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBKaizo Calc</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="lvl-calc">
+    <header class="header-bar">
+        <div class="header-left">
+            <a href="index.html" class="logo">FBKaizo AI</a>
+        </div>
+        <nav class="header-right">
+            <a href="index.html">Homepage</a>
+            <a href="lvl_calc.html">Compare</a>
+            <!-- <a href="orbs.html">Orbs</a> --> <!-- ADD THIS BACK AFTER PRESENTATIONS -->
+        </nav>
+    </header>
+    <main class="main-content">
+        <div class="cards-row">
+            <div class="card-holder">
+                <div class="monster-search">
+                    <input type="text" class="monster-search-input" placeholder="Search monster 1..." autocomplete="off">
+                    <ul class="monster-dropdown dropdown-list"></ul>
+                </div>
+                <div id="monster-card" class="monster-card hidden">
+                    <img id="monster-portrait" class="monster-portrait" src="" alt="Monster Portrait">
+                    <div class="level-calc-container" class="level-calc-container hidden">
+                        <label for="level-input" class="level-label">Level:</label>
+                        <input type="number" id="level-input" class="level-input" min="1" max="99" value="1">
+                    </div>
+                    <h2 class="monster-name"></h2>
+                    <div class="monster-fields-grid">
+                        <div class="monster-field"><span>Class:</span> <span class="monster-class"></span></div>
+                        <div class="monster-field"><span>GT:</span> <span class="monster-gt"></span></div>
+                        <div class="monster-field"><span>HP:</span> <span class="monster-hp"></span></div>
+                        <div class="monster-field"><span>AP:</span> <span class="monster-ap"></span></div>
+                        <div class="monster-field"><span>ATK:</span> <span class="monster-atk"></span></div>
+                        <div class="monster-field"><span>DEF:</span> <span class="monster-def"></span></div>
+                        <div class="monster-field"><span>Luck:</span> <span class="monster-luck"></span></div>
+                        <div class="monster-field"><span>Speed:</span> <span class="monster-speed"></span></div>
+                    </div>
+                    <div class="monster-field"><span>Battle Arts Effect:</span> <span class="monster-battle-art"></span></div>
+                    <div class="monster-field"><span>Special Name:</span> <span class="monster-special-name"></span></div>
+                    <div class="monster-field"><span>Special Description:</span> <span class="monster-special-desc"></span></div>
+                    <div class="monster-field"><span>Ability 1:</span> <span class="monster-ability-1"></span></div>
+                    <div class="monster-field"><span>Ability 2:</span> <span class="monster-ability-2"></span></div>
+                    <div class="monster-field"><span>Ability 3:</span> <span class="monster-ability-3"></span></div>
+                </div>
+            </div>
+            <div class="card-holder">
+                <div class="monster-search">
+                    <input type="text" class="monster-search-input" placeholder="Search monster 2..." autocomplete="off">
+                    <ul class="monster-dropdown dropdown-list"></ul>
+                </div>
+                <div id="monster-card" class="monster-card hidden">
+                    <img id="monster-portrait" class="monster-portrait" src="" alt="Monster Portrait">
+                    <div class="level-calc-container" class="level-calc-container hidden">
+                        <label for="level-input" class="level-label">Level:</label>
+                        <input type="number" id="level-input" class="level-input" min="1" max="99" value="1">
+                    </div>
+                    <h2 class="monster-name"></h2>
+                    <div class="monster-fields-grid">
+                        <div class="monster-field"><span>Class:</span> <span class="monster-class"></span></div>
+                        <div class="monster-field"><span>GT:</span> <span class="monster-gt"></span></div>
+                        <div class="monster-field"><span>HP:</span> <span class="monster-hp"></span></div>
+                        <div class="monster-field"><span>AP:</span> <span class="monster-ap"></span></div>
+                        <div class="monster-field"><span>ATK:</span> <span class="monster-atk"></span></div>
+                        <div class="monster-field"><span>DEF:</span> <span class="monster-def"></span></div>
+                        <div class="monster-field"><span>Luck:</span> <span class="monster-luck"></span></div>
+                        <div class="monster-field"><span>Speed:</span> <span class="monster-speed"></span></div>
+                    </div>
+                    <div class="monster-field"><span>Battle Arts Effect:</span> <span class="monster-battle-art"></span></div>
+                    <div class="monster-field"><span>Special Name:</span> <span class="monster-special-name"></span></div>
+                    <div class="monster-field"><span>Special Description:</span> <span class="monster-special-desc"></span></div>
+                    <div class="monster-field"><span>Ability 1:</span> <span class="monster-ability-1"></span></div>
+                    <div class="monster-field"><span>Ability 2:</span> <span class="monster-ability-2"></span></div>
+                    <div class="monster-field"><span>Ability 3:</span> <span class="monster-ability-3"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="individual-graphs-row">
+            <canvas id="stat-graph-1" class="stat-graph" width="400" height="200"></canvas>
+            <canvas id="stat-graph-2" class="stat-graph" width="400" height="200"></canvas>
+        </div>
+        <div class="comparison-graphs-grid">
+            <canvas id="hp-comparison-graph" width="400" height="150"></canvas>
+            <canvas id="ap-comparison-graph" width="400" height="150"></canvas>
+            <canvas id="atk-comparison-graph" width="400" height="150"></canvas>
+            <canvas id="def-comparison-graph" width="400" height="150"></canvas>
+        </div>
+    </main>
+    <script type="module" src="lvl_script.js"></script>
+    <script type="module" src="lvl_calc.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
