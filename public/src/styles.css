@@ -630,3 +630,8 @@ body.lvl-calc .comparison-graphs-grid canvas {
     margin: 0 auto;
 }
 
+.send {
+    margin-top: 3px;
+    margin-left: 1.5px;
+}
+

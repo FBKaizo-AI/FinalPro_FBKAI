@@ -3,6 +3,7 @@ import '../styles.css';
 import { Monsters } from '../assets/monsters';
 import { calc } from '../utils/lvl_calc';
 import { marked } from 'marked';
+import { SendHorizontal } from 'lucide-react';
 
 function displayValue(val) {
   if (val === -1 || val === "No Effect") return "-";
@@ -132,7 +133,7 @@ function ChatSection() {
           placeholder="Ask about monster stats, skills, or strategies..."
           autoComplete="off"
         />
-        <button type="submit">&#9658;</button>
+        <button type="submit"><span className="send"><SendHorizontal color="#000000" stroke-width={1.4} size={18} fill="black"/></span></button>
       </form>
     </section>
   );
