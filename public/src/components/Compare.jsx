@@ -24,6 +24,11 @@ function getStatGrowthArrays(monster) {
   return { hpArr, atkArr, defArr, apArr };
 }
 
+function displayValue(val) {
+  if (val === -1 || val === "No Effect") return "-";
+  return val;
+}
+
 function MonsterCard({ monster, level, onLevelChange, statCompare }) {
   if (!monster) return null;
   const [stats, setStats] = useState(calc(monster, level));
@@ -33,9 +38,9 @@ function MonsterCard({ monster, level, onLevelChange, statCompare }) {
 
   function getStatColor(statName) {
     if (!statCompare) return {};
-    if (statCompare[statName] === 'high') return { color: '#00ff00' };
-    if (statCompare[statName] === 'low') return { color: '#ff6384' };
-    return {};
+    if (statCompare[statName] === 'high') return { color: '#39ff14', fontWeight: 'bold' };
+    if (statCompare[statName] === 'low') return { color: '#ff3b3b', fontWeight: 'bold' };
+    return { color: 'inherit', fontWeight: 'normal' };
   }
 
   return (
@@ -64,21 +69,21 @@ function MonsterCard({ monster, level, onLevelChange, statCompare }) {
       </div>
       <h2>{monster.monsterName}</h2>
       <div className="monster-fields-grid">
-        <div className="monster-field"><span>Class:</span> <span>{monster.class}</span></div>
-        <div className="monster-field"><span>GT:</span> <span>{monster.gt}</span></div>
-        <div className="monster-field"><span>HP:</span> <span style={getStatColor('hp')}>{stats[0]}</span></div>
-        <div className="monster-field"><span>AP:</span> <span style={getStatColor('ap')}>{stats[3]}</span></div>
-        <div className="monster-field"><span>ATK:</span> <span style={getStatColor('atk')}>{stats[1]}</span></div>
-        <div className="monster-field"><span>DEF:</span> <span style={getStatColor('def')}>{stats[2]}</span></div>
-        <div className="monster-field"><span>Luck:</span> <span>{monster.luck}</span></div>
-        <div className="monster-field"><span>Speed:</span> <span>{monster.speed}</span></div>
+        <div className="monster-field"><span>Class:</span> <span>{displayValue(monster.class)}</span></div>
+        <div className="monster-field"><span>GT:</span> <span>{displayValue(monster.gt)}</span></div>
+        <div className="monster-field"><span>HP:</span> <span style={getStatColor('hp')}>{displayValue(stats[0])}</span></div>
+        <div className="monster-field"><span>AP:</span> <span style={getStatColor('ap')}>{displayValue(stats[3])}</span></div>
+        <div className="monster-field"><span>ATK:</span> <span style={getStatColor('atk')}>{displayValue(stats[1])}</span></div>
+        <div className="monster-field"><span>DEF:</span> <span style={getStatColor('def')}>{displayValue(stats[2])}</span></div>
+        <div className="monster-field"><span>Luck:</span> <span>{displayValue(monster.luck)}</span></div>
+        <div className="monster-field"><span>Speed:</span> <span>{displayValue(monster.speed)}</span></div>
       </div>
-      <div className="monster-field"><span>Battle Arts Effect:</span> <span>{monster.attackEffect} ({monster.attackEffectUnlockLvl})</span></div>
-      <div className="monster-field"><span>Special Name:</span> <span>{monster.specialName}</span></div>
-      <div className="monster-field"><span>Special Description:</span> <span>{monster.specialEffect}</span></div>
-      <div className="monster-field"><span>Ability 1:</span> <span>{monster.ability1} ({monster.ability1UnlockLvl})</span></div>
-      <div className="monster-field"><span>Ability 2:</span> <span>{monster.ability2} ({monster.ability2UnlockLvl})</span></div>
-      <div className="monster-field"><span>Ability 3:</span> <span>{monster.ability3} ({monster.ability3UnlockLvl})</span></div>
+      <div className="monster-field"><span>Battle Arts Effect:</span> <span>{displayValue(monster.attackEffect)} ({displayValue(monster.attackEffectUnlockLvl)})</span></div>
+      <div className="monster-field"><span>Special Name:</span> <span>{displayValue(monster.specialName)}</span></div>
+      <div className="monster-field"><span>Special Description:</span> <span>{displayValue(monster.specialEffect)}</span></div>
+      <div className="monster-field"><span>Ability 1:</span> <span>{displayValue(monster.ability1)} ({displayValue(monster.ability1UnlockLvl)})</span></div>
+      <div className="monster-field"><span>Ability 2:</span> <span>{displayValue(monster.ability2)} ({displayValue(monster.ability2UnlockLvl)})</span></div>
+      <div className="monster-field"><span>Ability 3:</span> <span>{displayValue(monster.ability3)} ({displayValue(monster.ability3UnlockLvl)})</span></div>
     </div>
   );
 }
@@ -210,19 +215,22 @@ export default function Compare() {
         </div>
         <nav className="header-right">
           <a href="/">Homepage</a>
+          <a href="/compare">Compare</a>
         </nav>
       </header>
-      <main className="main-content compare-layout" style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', minHeight: '100vh', width: '100vw', marginTop: '56px' }}>
-        <div className="compare-cards-row" style={{ display: 'flex', gap: '32px', justifyContent: 'center', alignItems: 'flex-start', width: '100%', marginTop: '16px', marginBottom: '0px' }}>
-          {/* Left side: Searchbar, dropdown, monster card, and stat graph below */}
-          <div className="card-holder" style={{ width: '500px', minWidth: '320px', maxWidth: '520px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <main className="main-content compare-layout" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', minHeight: '100vh', width: '100vw', marginTop: '56px' }}>
+        <div className="cards-row" style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '32px', marginBottom: '0px' }}>
+          <div className="card-holder">
             <div className="monster-search">
               <input
                 type="text"
                 value={search1}
-                onChange={e => setSearch1(e.target.value)}
+                onChange={e => {
+                  setSearch1(e.target.value);
+                  setIsDropdownOpen([true, isDropdownOpen[1]]);
+                }}
                 onFocus={() => setIsDropdownOpen([true, isDropdownOpen[1]])}
-                onBlur={() => setIsDropdownOpen([false, isDropdownOpen[1]])}
+                onBlur={() => setTimeout(() => setIsDropdownOpen([false, isDropdownOpen[1]]), 120)}
                 onKeyDown={e => {
                   if (e.key === "Enter") {
                     setIsDropdownOpen([false, isDropdownOpen[1]]);
@@ -230,13 +238,14 @@ export default function Compare() {
                     if (match) {
                       setSelectedMonsters([match, selectedMonsters[1]]);
                       setLevels([1, levels[1]]);
+                      setSearch1(match.monsterName);
                     }
                   }
                 }}
                 placeholder="Search monster 1..."
                 autoComplete="off"
               />
-              <ul className={`monster-dropdown dropdown-list${isDropdownOpen[0] && filteredMonsters1.length > 0 ? ' show' : ''}`}>
+              <ul className={`monster-dropdown dropdown-list${isDropdownOpen[0] && filteredMonsters1.length > 0 ? ' show' : ''}`}> 
                 {filteredMonsters1.map(monster => {
                   return <li key={monster.monsterName} onMouseDown={() => {
                     setSelectedMonsters([monster, selectedMonsters[1]]);
@@ -253,20 +262,18 @@ export default function Compare() {
               onLevelChange={lvl => setLevels([lvl, levels[1]])}
               statCompare={getStatCompare(0)}
             />
-            {/* Individual stat graph below the card, centered */}
-            <div className="stat-graph-pair" style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <StatGraph monster={selectedMonsters[0]} idx={0} />
-            </div>
           </div>
-          {/* Right side: Searchbar, dropdown, monster card, and stat graph below */}
-          <div className="card-holder" style={{ width: '500px', minWidth: '320px', maxWidth: '520px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div className="card-holder">
             <div className="monster-search">
               <input
                 type="text"
                 value={search2}
-                onChange={e => setSearch2(e.target.value)}
+                onChange={e => {
+                  setSearch2(e.target.value);
+                  setIsDropdownOpen([isDropdownOpen[0], true]);
+                }}
                 onFocus={() => setIsDropdownOpen([isDropdownOpen[0], true])}
-                onBlur={() => setIsDropdownOpen([isDropdownOpen[0], false])}
+                onBlur={() => setTimeout(() => setIsDropdownOpen([isDropdownOpen[0], false]), 120)}
                 onKeyDown={e => {
                   if (e.key === "Enter") {
                     setIsDropdownOpen([isDropdownOpen[0], false]);
@@ -274,13 +281,14 @@ export default function Compare() {
                     if (match) {
                       setSelectedMonsters([selectedMonsters[0], match]);
                       setLevels([levels[0], 1]);
+                      setSearch2(match.monsterName);
                     }
                   }
                 }}
                 placeholder="Search monster 2..."
                 autoComplete="off"
               />
-              <ul className={`monster-dropdown dropdown-list${isDropdownOpen[1] && filteredMonsters2.length > 0 ? ' show' : ''}`}>
+              <ul className={`monster-dropdown dropdown-list${isDropdownOpen[1] && filteredMonsters2.length > 0 ? ' show' : ''}`}> 
                 {filteredMonsters2.map(monster => {
                   return <li key={monster.monsterName} onMouseDown={() => {
                     setSelectedMonsters([selectedMonsters[0], monster]);
@@ -297,15 +305,21 @@ export default function Compare() {
               onLevelChange={lvl => setLevels([levels[0], lvl])}
               statCompare={getStatCompare(1)}
             />
-            {/* Individual stat graph below the card, centered */}
-            <div className="stat-graph-pair" style={{ marginTop: '18px', display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <StatGraph monster={selectedMonsters[1]} idx={1} />
-            </div>
           </div>
         </div>
-        {/* Comparison graphs below the card holders and stat graphs */}
-        <div className="compare-graphs-section">
-          <div className="comparison-graphs-grid">
+        {/* Individual stat graphs row below cards */}
+        <div className="individual-graphs-row" style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '32px', margin: '32px 0 0 0' }}>
+          <div style={{ width: '500px', display: 'flex', justifyContent: 'center' }}>
+            <StatGraph monster={selectedMonsters[0]} idx={0} />
+          </div>
+          <div style={{ width: '500px', display: 'flex', justifyContent: 'center' }}>
+            <StatGraph monster={selectedMonsters[1]} idx={1} />
+          </div>
+        </div>
+        {/* Comparison graphs section, always below individual graphs */}
+        <div style={{ width: '100%', marginTop: '48px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1 }}></div>
+          <div className="comparison-graphs-grid" style={{ width: '900px', marginRight: '180px' }}>
             <ComparisonGraph monsters={selectedMonsters} stat="hp" id="hp-comparison-graph" />
             <ComparisonGraph monsters={selectedMonsters} stat="ap" id="ap-comparison-graph" />
             <ComparisonGraph monsters={selectedMonsters} stat="atk" id="atk-comparison-graph" />

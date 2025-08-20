@@ -2470,8 +2470,8 @@ export const Monsters = [{
 },
 {
   "": 95,
-  monsterName: "La Jinn Mystical Genie of the Lamp",
-  portrait: `/src/assets/Monster Portraits/La Jinn Mystical Genie of the Lamp.png`,
+  monsterName: "La Jinn the Mystical Genie of the Lamp",
+  portrait: `/src/assets/Monster Portraits/La Jinn the Mystical Genie of the Lamp.png`,
   class: "Fiend",
   hp: 950,
   atk: 1800,

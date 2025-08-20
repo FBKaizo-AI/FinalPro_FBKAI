@@ -4,6 +4,11 @@ import { Monsters } from '../assets/monsters';
 import { calc } from '../utils/lvl_calc';
 import { marked } from 'marked';
 
+function displayValue(val) {
+  if (val === -1 || val === "No Effect") return "-";
+  return val;
+}
+
 function MonsterCard({ monster, level, onLevelChange }) {
   if (!monster) return null;
   const [stats, setStats] = useState(calc(monster, level));
@@ -38,21 +43,21 @@ function MonsterCard({ monster, level, onLevelChange }) {
       </div>
       <h2>{monster.monsterName}</h2>
       <div className="monster-fields-grid">
-        <div className="monster-field"><span>Class:</span> <span>{monster.class}</span></div>
-        <div className="monster-field"><span>GT:</span> <span>{monster.gt}</span></div>
-        <div className="monster-field"><span>HP:</span> <span>{stats[0]}</span></div>
-        <div className="monster-field"><span>AP:</span> <span>{stats[3]}</span></div>
-        <div className="monster-field"><span>ATK:</span> <span>{stats[1]}</span></div>
-        <div className="monster-field"><span>DEF:</span> <span>{stats[2]}</span></div>
-        <div className="monster-field"><span>Luck:</span> <span>{monster.luck}</span></div>
-        <div className="monster-field"><span>Speed:</span> <span>{monster.speed}</span></div>
+        <div className="monster-field"><span>Class:</span> <span>{displayValue(monster.class)}</span></div>
+        <div className="monster-field"><span>GT:</span> <span>{displayValue(monster.gt)}</span></div>
+        <div className="monster-field"><span>HP:</span> <span>{displayValue(stats[0])}</span></div>
+        <div className="monster-field"><span>AP:</span> <span>{displayValue(stats[3])}</span></div>
+        <div className="monster-field"><span>ATK:</span> <span>{displayValue(stats[1])}</span></div>
+        <div className="monster-field"><span>DEF:</span> <span>{displayValue(stats[2])}</span></div>
+        <div className="monster-field"><span>Luck:</span> <span>{displayValue(monster.luck)}</span></div>
+        <div className="monster-field"><span>Speed:</span> <span>{displayValue(monster.speed)}</span></div>
       </div>
-      <div className="monster-field"><span>Battle Arts Effect:</span> <span>{monster.attackEffect} ({monster.attackEffectUnlockLvl})</span></div>
-      <div className="monster-field"><span>Special Name:</span> <span>{monster.specialName}</span></div>
-      <div className="monster-field"><span>Special Description:</span> <span>{monster.specialEffect}</span></div>
-      <div className="monster-field"><span>Ability 1:</span> <span>{monster.ability1} ({monster.ability1UnlockLvl})</span></div>
-      <div className="monster-field"><span>Ability 2:</span> <span>{monster.ability2} ({monster.ability2UnlockLvl})</span></div>
-      <div className="monster-field"><span>Ability 3:</span> <span>{monster.ability3} ({monster.ability3UnlockLvl})</span></div>
+      <div className="monster-field"><span>Battle Arts Effect:</span> <span>{displayValue(monster.attackEffect)} ({displayValue(monster.attackEffectUnlockLvl)})</span></div>
+      <div className="monster-field"><span>Special Name:</span> <span>{displayValue(monster.specialName)}</span></div>
+      <div className="monster-field"><span>Special Description:</span> <span>{displayValue(monster.specialEffect)}</span></div>
+      <div className="monster-field"><span>Ability 1:</span> <span>{displayValue(monster.ability1)} ({displayValue(monster.ability1UnlockLvl)})</span></div>
+      <div className="monster-field"><span>Ability 2:</span> <span>{displayValue(monster.ability2)} ({displayValue(monster.ability2UnlockLvl)})</span></div>
+      <div className="monster-field"><span>Ability 3:</span> <span>{displayValue(monster.ability3)} ({displayValue(monster.ability3UnlockLvl)})</span></div>
     </div>
   );
 }
