@@ -163,9 +163,9 @@ app.post('/api/ai-output', async (req, res) => {
 
 
 
-// Catch-all route: Serve index.html for any unmatched route
+// Catch-all route: Serve Homepage for any unmatched route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/src/components/Homepage.jsx'));
 });
 
 
