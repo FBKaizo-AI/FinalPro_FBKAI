@@ -1,4 +1,4 @@
-import {Monsters} from "./assets/monsters.js"
+import {Monsters} from "../assets/monsters.js"
 
 const Marshalls = [
     {
