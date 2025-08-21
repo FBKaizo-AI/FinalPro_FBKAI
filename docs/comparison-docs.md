@@ -36,3 +36,20 @@ findClosestMonsters("Blue-Eyes", monsters);
 - Color-coded results
 - Sortable similarity scores
 - Interactive comparison view
+
+## Step-by-Step Process
+
+### 1. Data Preparation
+1. Monster data is loaded from the MongoDB database
+2. Each monster's attributes are normalized to a 0-255 scale
+3. Attributes are mapped to RGB color components:
+   - R (Red): Attack and HP values
+   - G (Green): Defense and Speed values
+   - B (Blue): Special abilities and Luck
+
+### 2. Color Conversion Process
+1. Normalize monster stats:
+   ```javascript
+   const normalizedATK = (monster.ATK / maxATK) * 255;
+   const normalizedDEF = (monster.DEF / maxDEF) * 255;
+   ```
