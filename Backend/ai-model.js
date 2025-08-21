@@ -89,12 +89,14 @@ app.post('/api/ai-output', async (req, res) => {
     const results = fuse.search(question);
     let monsterMatches = [];
     if (results.length > 0) {
+      
       // Get the best match
       monsterMatches = await Monster.find({ "Monster Name": results[0].item["Monster Name"] });
     } else if (/highest\s+attack/i.test(question)) {
       // this one can create an array of monsters for highest atk for testing
       monsterMatches = await Monster.find().sort({ ATK: -1 }).limit(10);
     } else {
+
       // this one will handle special characters for security
       let searchTerm = extractMonsterName(question)
       const safeQuestion = escapeRegex(searchTerm);
