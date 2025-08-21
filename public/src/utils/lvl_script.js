@@ -81,10 +81,10 @@ import { Chart } from 'chart.js';
 //         }
 //     });
 
-    function displayValue(val) {
-        if (val === -1 || val === "No Effect") return "-";
-        return val;
-    }
+    // function displayValue(val) {
+    //     if (val === -1 || val === "No Effect") return "-";
+    //     return val;
+    // }
 
 
 //-------------------THIS BUILT AND SHOWED THE MONSTER CARD-----------------

@@ -1,3 +1,4 @@
+//hardcoded database of monsters for frontend calculations
 export const Monsters = [{
   "": 0,
   monsterName: "Alpha The Magnet Warrior",

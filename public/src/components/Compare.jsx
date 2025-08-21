@@ -1,16 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import '../styles.css';
 import { Monsters } from '../assets/monsters';
 import { calc, hpCalc, atkDefCalc, apCalc } from '../utils/lvl_calc';
 import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, Legend } from 'chart.js';
 Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, Legend);
 
-// Helper to get stat arrays for a monster
+// get stat array for a monster
 function getStatGrowthArrays(monster) {
+  // setting up variables/arrays for stats
   const maxLevel = 99;
   let hpArr = [], atkArr = [], defArr = [], apArr = [];
   let baseHp = monster.hp, baseAtk = monster.atk, baseDef = monster.def, baseAp = monster.ap;
   let gt = monster.gt;
+
   for (let lvl = 1; lvl <= maxLevel; lvl++) {
     let hp = baseHp + hpCalc(gt, lvl);
     let atk = baseAtk + atkDefCalc(gt, lvl);
@@ -24,18 +26,25 @@ function getStatGrowthArrays(monster) {
   return { hpArr, atkArr, defArr, apArr };
 }
 
+// displays null/useless values in the DB as "-"
 function displayValue(val) {
   if (val === -1 || val === "No Effect") return "-";
   return val;
 }
 
+
+// sets up comparison specific monster cards
 function MonsterCard({ monster, level, onLevelChange, statCompare }) {
+
+  //establish useState and useEffect for changes
   if (!monster) return null;
   const [stats, setStats] = useState(calc(monster, level));
   useEffect(() => {
     setStats(calc(monster, level));
   }, [monster, level]);
 
+
+  //sets colors for the higher and lower numbers of a stat for both cards
   function getStatColor(statName) {
     if (!statCompare) return {};
     if (statCompare[statName] === 'high') return { color: '#39ff14', fontWeight: 'bold' };
@@ -43,11 +52,15 @@ function MonsterCard({ monster, level, onLevelChange, statCompare }) {
     return { color: 'inherit', fontWeight: 'normal' };
   }
 
+
+  //building the card itself, returns elements for user viewing
   return (
     <div className="monster-card">
       <img className="monster-portrait" src={monster.portrait} alt={`${monster.monsterName} portrait`} />
+
       <div className="level-calc-container">
         <label htmlFor="level-input" className="level-label">Level:</label>
+
         <input
           type="number"
           min={1}
@@ -56,17 +69,19 @@ function MonsterCard({ monster, level, onLevelChange, statCompare }) {
           onChange={e => {
             const val = e.target.value;
             if (val === '') {
-              onLevelChange(null);
+              onLevelChange(null); // allows for field clearing
             } else {
               const num = Number(val);
               if (!isNaN(num) && num >= 1 && num <= 99) {
-                onLevelChange(num);
+                onLevelChange(num); // only runs within range
               }
             }
           }}
           className="level-input"
         />
       </div>
+
+
       <h2>{monster.monsterName}</h2>
       <div className="monster-fields-grid">
         <div className="monster-field"><span>Class:</span> <span>{displayValue(monster.class)}</span></div>
@@ -84,13 +99,22 @@ function MonsterCard({ monster, level, onLevelChange, statCompare }) {
       <div className="monster-field"><span>Ability 1:</span> <span>{displayValue(monster.ability1)} ({displayValue(monster.ability1UnlockLvl)})</span></div>
       <div className="monster-field"><span>Ability 2:</span> <span>{displayValue(monster.ability2)} ({displayValue(monster.ability2UnlockLvl)})</span></div>
       <div className="monster-field"><span>Ability 3:</span> <span>{displayValue(monster.ability3)} ({displayValue(monster.ability3UnlockLvl)})</span></div>
-    </div>
+    </div> // ^^^^^^^^^^^^ builds out the monster stats on the card from the hardcoded DB, plus stat colors for this one
   );
 }
 
+
+
+//building individual monster graphs for stat scaling per level
 function StatGraph({ monster, idx }) {
   const chartRef = useRef(null);
 
+  //builds and renders individual stat graph in canvas element when monster is selected
+  //ctx takes chartRef variable above to reference canvas element with useRef(). The canvas element is where the chart will render
+  //getStatGrowthArrays gets your 1-99 iterations for stat values
+  //ctx gets the current context of the canvas element, which you need to render the chart
+  //chart variable makes a new Chart.js with the ctx variable's context. Chart is stored in chart variable.
+  
   useEffect(() => {
     if (!monster) return;
     const { hpArr, atkArr, defArr } = getStatGrowthArrays(monster);
@@ -98,6 +122,7 @@ function StatGraph({ monster, idx }) {
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
+        //labels creates a new array with a length of 99. "_" is the unused value, which is the array element itself and not needed here. "i" is the iteration.
         labels: Array.from({ length: 99 }, (_, i) => i + 1),
         datasets: [
           { label: 'HP', data: hpArr, borderColor: '#00eaff', backgroundColor: 'rgba(0,234,255,0.1)', tension: 0.2 },
@@ -128,12 +153,17 @@ function StatGraph({ monster, idx }) {
         }
       }
     });
-    return () => chart.destroy();
+    return () => chart.destroy(); // removes chart and its listeners when it's time to bring a new one in (selecting new monster)
   }, [monster]);
 
+  //renders chart
   return <canvas ref={chartRef} width={400} height={200}></canvas>;
 }
 
+
+
+//builds and renders 4 graphs for comparing stats between two selected monsters from levels 1-99
+//requires both monsters to be selected but follows same rules as graphs above
 function ComparisonGraph({ monsters, stat, id }) {
   const chartRef = useRef(null);
 
@@ -180,7 +210,10 @@ function ComparisonGraph({ monsters, stat, id }) {
   return <canvas ref={chartRef} width={480} height={110}></canvas>;
 }
 
+
+// prepares Compare webpage for export to use in App.jsx
 export default function Compare() {
+  // set up useState variables for component
   const [search1, setSearch1] = useState('');
   const [search2, setSearch2] = useState('');
   const [selectedMonsters, setSelectedMonsters] = useState([null, null]);
@@ -191,22 +224,25 @@ export default function Compare() {
 
   // Stat comparison logic
   function getStatCompare(idx) {
-    const otherIdx = idx === 0 ? 1 : 0;
+    //setting up comparison variables
+    const otherIdx = idx === 0 ? 1 : 0; // determines index of other monster (if idx===0, otherIdx===1 and vice versa)
     const m1 = selectedMonsters[idx];
     const m2 = selectedMonsters[otherIdx];
-    const l1 = levels[idx] ?? 1;
+    const l1 = levels[idx] ?? 1; // level defaults to 1 if not set
     const l2 = levels[otherIdx] ?? 1;
-    if (!m1 || !m2) return null;
-    const s1 = calc(m1, l1);
+    if (!m1 || !m2) return null; // requires both monsters be selected to continue
+    const s1 = calc(m1, l1); // calculates monster stats at their assigned level
     const s2 = calc(m2, l2);
     return {
       hp: s1[0] > s2[0] ? 'high' : s1[0] < s2[0] ? 'low' : 'equal',
       ap: s1[3] > s2[3] ? 'high' : s1[3] < s2[3] ? 'low' : 'equal',
       atk: s1[1] > s2[1] ? 'high' : s1[1] < s2[1] ? 'low' : 'equal',
       def: s1[2] > s2[2] ? 'high' : s1[2] < s2[2] ? 'low' : 'equal',
-    };
+    }; // ^^^^ determines which stats are higher or lower to assign colors
   }
 
+
+  //webpage content
   return (
     <div>
       <header className="header-bar">

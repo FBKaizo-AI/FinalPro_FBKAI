@@ -1,5 +1,6 @@
 import { Monsters } from "../assets/monsters.js";
 
+// array of objects for level ups relating to growth trees
 const Growths = {
     0: {
         atkDef: [35, 30, 15], // level ups [1-29, 30-59, 60-98]
@@ -127,12 +128,13 @@ const Growths = {
 
 // base function for calculations
 function calc(monster, level) {
+    // runs the four functions below to get the 4 associated stats
     let Hp = monster.hp + hpCalc(monster.gt, level)
     let Atk = monster.atk + atkDefCalc(monster.gt, level)
     let Def = monster.def + atkDefCalc(monster.gt, level)
     let Ap = monster.ap + apCalc(monster.gt, level)
 
-    
+    //answers from above are put into the array below
     let stats = []
     stats.push(Math.ceil(Hp), Atk, Def, Ap); //the math.ceil is added due to index 17 of Growths having 11.5 as a growth
     // console.log(stats)
