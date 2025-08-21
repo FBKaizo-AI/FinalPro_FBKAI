@@ -51,7 +51,10 @@ function escapeRegex(str) {
 // handles more natural sentences for NLP
 function extractMonsterName(question) {
   // Very basic: look for "for X" or "of X"
-  const match = question.match(/for (.+)$/i) || question.match(/of (.+)$/i);
+  const match =
+    question.match(/for (.+)$/i) ||
+    question.match(/of (.+)$/i) ||
+    question.match(/([a-zA-Z0-9\s]+)'s/i);
   if (match) return match[1].replace(/[?]/g, '').trim();
   return question;
 }
@@ -92,29 +95,67 @@ app.post('/api/ai-output', async (req, res) => {
       
       // Get the best match
       monsterMatches = await Monster.find({ "Monster Name": results[0].item["Monster Name"] });
+      //starting below, it will start to search for arrays of monsters based on certain conditions
+      //below handles more robust types of questions
     } else if (/highest\s+attack/i.test(question)) {
-      // this one can create an array of monsters for highest atk for testing
       monsterMatches = await Monster.find().sort({ ATK: -1 }).limit(10);
+    } else if (/lowest\s+attack/i.test(question)) {
+      monsterMatches = await Monster.find().sort({ ATK: 1 }).limit(10);
+    } else if (/highest\s+def/i.test(question)) {
+      monsterMatches = await Monster.find().sort({ DEF: -1 }).limit(10);
+    } else if (/lowest\s+def/i.test(question)) {
+      monsterMatches = await Monster.find().sort({ DEF: 1 }).limit(10);
+    } else if (/highest\s+hp/i.test(question)) {
+      monsterMatches = await Monster.find().sort({ HP: -1 }).limit(10);
+    } else if (/lowest\s+hp/i.test(question)) {
+      monsterMatches = await Monster.find().sort({ HP: 1 }).limit(10);
+    } else if (/gt'?s? (of )?([0-9]+)/i.test(question)) {
+      const gtValue = question.match(/gt'?s? (of )?([0-9]+)/i)[2];
+      monsterMatches = await Monster.find({ GT: Number(gtValue) });
+    } else if (/ability (with|named)? ?([a-zA-Z\s]+)/i.test(question)) {
+      const abilityName = question.match(/ability (with|named)? ?([a-zA-Z\s]+)/i)[2].trim();
+      monsterMatches = await Monster.find({
+        $or: [
+          { "Ability 1": { $regex: abilityName, $options: 'i' } },
+          { "Ability 2": { $regex: abilityName, $options: 'i' } },
+          { "Ability 3": { $regex: abilityName, $options: 'i' } }
+        ]
+      });
     } else {
 
       // this one will handle special characters for security
-      let searchTerm = extractMonsterName(question)
-      const safeQuestion = escapeRegex(searchTerm);
-      monsterMatches = await Monster.find({
-        "Monster Name": { $regex: safeQuestion, $options: 'i' }
-      }).limit(3);
+      const searchTerm = extractMonsterName(question);
+      if (searchTerm) {
+        const safeQuestion = escapeRegex(searchTerm);
+        monsterMatches = await Monster.find({
+          "Monster Name": { $regex: safeQuestion, $options: 'i' }
+        }).limit(3);
+      } else {
+        // Fallback: try to find any monster name present in the question
+        const lowerQ = question.toLowerCase();
+        let foundName = null;
+        for (const mon of allMonsters) {
+          const name = mon["Monster Name"].toLowerCase();
+          if (lowerQ.includes(name)) {
+            foundName = mon["Monster Name"];
+            break;
+          }
+        }
+        if (foundName) {
+          monsterMatches = await Monster.find({ "Monster Name": foundName });
+        }
+      }
     }
 
-
+    let context = "";
     // returns this if monster name can't be found
     if (monsterMatches.length === 0) {
-      console.log(results, monsterMatches, question); // COMMENT THIS OUT WHEN DONE TESTING
-      return res.status(404).json({ answer: "No matching monster found in the database." });
+      // console.log(results, monsterMatches, question); // COMMENT THIS OUT WHEN DONE TESTING
+      context += `No matching monster found in the database. Try to answer the user's question as best you can using your own knowledge.\nUser question: ${question}\nAI answer:`;
     }
 
-
     // Build context for Gemini API
-    let context = 'Here is monster info from the database:\n';
+    context += 'Here is monster info from the database:\n';
     monsterMatches.forEach(mon => {
       context += `Name: ${mon["Monster Name"]}\n`;
       context += `Class: ${mon.Class}\n`;
@@ -126,6 +167,7 @@ app.post('/api/ai-output', async (req, res) => {
       context += `Ability 2: ${mon["Ability 2"]}\n`;
       context += `Ability 3: ${mon["Ability 3"]}\n\n`;
     });
+  
     //adjusted context to be helpful while still being accurate with DB data.
     context += `Using the monster info above, respond to the user's question with relevant data for an accurate answer. 
                 Be detailed, but format your response in clear sections using Markdown. 
@@ -165,9 +207,9 @@ app.post('/api/ai-output', async (req, res) => {
 
 
 
-// Catch-all route: Serve index.html for any unmatched route
+// Catch-all route: Serve Homepage for any unmatched route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/src/components/Homepage.jsx'));
 });
 
 
