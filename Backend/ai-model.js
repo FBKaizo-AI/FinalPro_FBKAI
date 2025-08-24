@@ -90,49 +90,49 @@ app.post('/api/ai-output', async (req, res) => {
     // for specific questions
     const specificAnswers = {
       "what team would work well with dark magician?": `
-    **Recommended Team for Dark Magician**
+    Recommended Team for Dark Magician
 
     Dark Magician benefits from teammates who complement his abilities and provide strategic advantages:
 
-    - **Dark Magician Girl**  
+    - Dark Magician Girl  
       - Best choice for synergy.
-      - Grants access to *Defensive Magic* for healing.
-      - Enables the powerful combo attack: **Dark Burning Magic**.
+      - Grants access to Defensive Magic for healing.
+      - Enables the powerful combo attack: Dark Burning Magic.
 
-    - **Third Member: Status Guard Ability**  
-      - Choose a monster with *Status Guard* to protect against status effects.
+    - Third Member: Monster with Status Guard Ability  
+      - Choose a monster with Status Guard to protect against status effects.
       - This allows your team to safely face opponents with disruptive abilities.
 
-    *Tip: Building around Dark Magician Girl and a Status Guard monster creates a balanced and resilient team.*
+    Tip: Building around Dark Magician Girl and a Status Guard monster creates a balanced and resilient team.
     `,
 
       "what monsters with status guard would you recommend?": `
-    **Monsters with Status Guard: Recommendations**
+    Monsters with Status Guard: Recommendations
 
-    Here are some strong options for monsters with the *Status Guard* ability:
+    Here are some strong options for monsters with the Status Guard ability:
 
-    - **Dark Paladin**
-      - High damage: **2900 Attack**, 3 starting AP.
-      - Abilities: *Offensive Magic*, *Control Magic*.
-      - *Status Guard* unlocks at **level 50** (late game).
+    - Dark Paladin
+      - High damage: 2900 Attack, 3 starting AP.
+      - Abilities: Offensive Magic, Control Magic.
+      - Status Guard unlocks at level 50 (late game).
 
-    - **Magician of Faith**
-      - Early game option: *Status Guard* unlocks at **level 5**.
-      - Lower damage: **300 Attack**.
-      - Abilities: *Defensive Magic*, party revives via special **Resurrection**.
+    - Magician of Faith
+      - Early game option: Status Guard unlocks at level 5 (early game).
+      - Lower damage: 300 Attack.
+      - Abilities: Defensive Magic, party revives via special Resurrection.
 
-    - **Aqua Madoor**
-      - Balanced choice: *Status Guard* unlocks at **level 35**.
-      - Decent damage: **1200 Attack**.
-      - Abilities: *Tidal Wave* (AOE damage), *Defensive Magic* for healing.
+    - Aqua Madoor
+      - Balanced choice: Status Guard unlocks at level 35 (mid game).
+      - Decent damage: 1200 Attack.
+      - Abilities: Tidal Wave (AOE damage), Defensive Magic for healing.
 
-    *Consider your team's needs and progression to choose the best Status Guard monster for your strategy.*
+    Consider your team's needs and progression to choose the best Status Guard monster for your strategy.
     `
     };
 
     const normalizedQuestion = question.trim().toLowerCase();
     if (specificAnswers[normalizedQuestion]) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // adds delay to response
+      await new Promise(resolve => setTimeout(resolve, 2000)); // adds delay to response
       return res.status(200).json({ answer: specificAnswers[normalizedQuestion] });
     }
 
@@ -218,14 +218,7 @@ app.post('/api/ai-output', async (req, res) => {
     });
   
     //adjusted context to be helpful while still being accurate with DB data.
-    context += `Using the monster info above, respond to the user's question with relevant data for an accurate answer. 
-                Be detailed, but format your response in clear sections using Markdown. 
-                Use bullet points, bold for stat names, and short paragraphs under each section. 
-                Do not output giant blocks of text — break them up with line breaks.
-
-                User question: ${question}
-
-                AI answer:`;
+  context += `Using the monster info above, respond to the user's question with relevant data for an accurate answer.\n\nBe detailed, but format your response in clear sections using Markdown.\nUse bullet points, bold for stat names, and short paragraphs under each section.\nDo NOT use code blocks or preformatted text. Do NOT use triple backticks (\u0060\u0060\u0060).\nOnly use normal paragraphs, lists, and bold/italic formatting.\nMake sure your answer wraps and fits inside a chat bubble, just like the welcome message.\n\nUser question: ${question}\n\nAI answer:`;
 
 
 
