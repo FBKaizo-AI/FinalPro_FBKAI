@@ -87,13 +87,52 @@ app.post('/api/ai-output', async (req, res) => {
   try {
     const { question } = req.body;
 
+    // for specific questions
     const specificAnswers = {
-      "what team would work well with dark magician?": `There are a good number of teammates that work well with Dark Magician. Dark Magician Girl is going to be your best choice since it gives the team access to Defensive Magic for healing and allows Dark Magician to use his combo attack--Dark Burning Magic. Your third member should ideally have the Status Guard ability. Status Guard will allow you to take on teams that have status effects safely.`,
-      "what monsters with status guard would you recommend?": `There are a few good options for this; your first option could be Dark Paladin. Dark Paladin would bring high damage with his 2900 Attack and 3 starting AP, Offensive Magic, and Control magic. However, Dark Paladin gets his Status Guard at level 50, so fairly late into the game. If you wanted a status guard monster for earlier in the game, use Magician of Faith. While she has some of the lowest damage at 300 Attack, she brings Defensive Magic, party revives in the form of her special; Resurrection, and her Status Guard activates at level 5. Finally, Aqua Madoor brings the best of both worlds into one, getting his Status Guard at level 35, decent damage with his 1200 Attack and has an AOE damage skill in the form of his Tidal Wave special attack, and Defensive Magic for more healing.`
+      "what team would work well with dark magician?": `
+    **Recommended Team for Dark Magician**
+
+    Dark Magician benefits from teammates who complement his abilities and provide strategic advantages:
+
+    - **Dark Magician Girl**  
+      - Best choice for synergy.
+      - Grants access to *Defensive Magic* for healing.
+      - Enables the powerful combo attack: **Dark Burning Magic**.
+
+    - **Third Member: Status Guard Ability**  
+      - Choose a monster with *Status Guard* to protect against status effects.
+      - This allows your team to safely face opponents with disruptive abilities.
+
+    *Tip: Building around Dark Magician Girl and a Status Guard monster creates a balanced and resilient team.*
+    `,
+
+      "what monsters with status guard would you recommend?": `
+    **Monsters with Status Guard: Recommendations**
+
+    Here are some strong options for monsters with the *Status Guard* ability:
+
+    - **Dark Paladin**
+      - High damage: **2900 Attack**, 3 starting AP.
+      - Abilities: *Offensive Magic*, *Control Magic*.
+      - *Status Guard* unlocks at **level 50** (late game).
+
+    - **Magician of Faith**
+      - Early game option: *Status Guard* unlocks at **level 5**.
+      - Lower damage: **300 Attack**.
+      - Abilities: *Defensive Magic*, party revives via special **Resurrection**.
+
+    - **Aqua Madoor**
+      - Balanced choice: *Status Guard* unlocks at **level 35**.
+      - Decent damage: **1200 Attack**.
+      - Abilities: *Tidal Wave* (AOE damage), *Defensive Magic* for healing.
+
+    *Consider your team's needs and progression to choose the best Status Guard monster for your strategy.*
+    `
     };
 
     const normalizedQuestion = question.trim().toLowerCase();
     if (specificAnswers[normalizedQuestion]) {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // adds delay to response
       return res.status(200).json({ answer: specificAnswers[normalizedQuestion] });
     }
 
