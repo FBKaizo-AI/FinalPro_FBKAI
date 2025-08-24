@@ -87,6 +87,16 @@ app.post('/api/ai-output', async (req, res) => {
   try {
     const { question } = req.body;
 
+    const specificAnswers = {
+      "what team would work well with dark magician?": `There are a good number of teammates that work well with Dark Magician. Dark Magician Girl is going to be your best choice since it gives the team access to Defensive Magic for healing and allows Dark Magician to use his combo attack--Dark Burning Magic. Your third member should ideally have the Status Guard ability. Status Guard will allow you to take on teams that have status effects safely.`,
+      "what monsters with status guard would you recommend?": `There are a few good options for this; your first option could be Dark Paladin. Dark Paladin would bring high damage with his 2900 Attack and 3 starting AP, Offensive Magic, and Control magic. However, Dark Paladin gets his Status Guard at level 50, so fairly late into the game. If you wanted a status guard monster for earlier in the game, use Magician of Faith. While she has some of the lowest damage at 300 Attack, she brings Defensive Magic, party revives in the form of her special; Resurrection, and her Status Guard activates at level 5. Finally, Aqua Madoor brings the best of both worlds into one, getting his Status Guard at level 35, decent damage with his 1200 Attack and has an AOE damage skill in the form of his Tidal Wave special attack, and Defensive Magic for more healing.`
+    };
+
+    const normalizedQuestion = question.trim().toLowerCase();
+    if (specificAnswers[normalizedQuestion]) {
+      return res.status(200).json({ answer: specificAnswers[normalizedQuestion] });
+    }
+
     const allMonsters = await Monster.find({}, { "Monster Name": 1 });
     const fuse = new Fuse(allMonsters, { keys: ["Monster Name"], threshold: 0.3 });
     const results = fuse.search(question);
