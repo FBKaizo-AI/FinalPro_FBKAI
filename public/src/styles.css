@@ -52,16 +52,16 @@ body {
     z-index: 10;
 }
 .header-left .logo {
-    color: #ffb300;
+    color: #facfca;
     font-size: 1.36rem;
     font-weight: bold;
     text-decoration: none;
     letter-spacing: 1px;
     transition: color 0.2s;
 }
-.header-left .logo:hover {
+/* .header-left .logo:hover {
     color: #fff;
-}
+} */
 .header-right a {
     color: #fff;
     margin-left: 1.6rem;
@@ -635,3 +635,6 @@ body.lvl-calc .comparison-graphs-grid canvas {
     margin-left: 1.5px;
 }
 
+.ai-logo {
+    color: #ffb300;
+}
