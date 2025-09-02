@@ -147,7 +147,7 @@ function StatGraph({ monster, idx }) {
             ticks: { color: '#fff', font: { size: 14, weight: 'bold' } }
           },
           y: {
-            title: { display: true, text: 'Stat Value', color: '#fff', font: { size: 16, weight: 'bold' } },
+            title: { display: true, text: `Stat Value (${monster.monsterName})`, color: '#fff', font: { size: 16, weight: 'bold' } },
             ticks: { color: '#fff', font: { size: 14, weight: 'bold' } }
           }
         }

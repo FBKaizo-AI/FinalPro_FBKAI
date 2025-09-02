@@ -9,7 +9,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/compare" element={<Compare />} />
+        <Route path="/Compare" element={<Compare />} />
       </Routes>
       </BrowserRouter>
     </>
