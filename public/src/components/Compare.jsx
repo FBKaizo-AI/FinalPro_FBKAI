@@ -147,7 +147,7 @@ function StatGraph({ monster, idx }) {
             ticks: { color: '#fff', font: { size: 14, weight: 'bold' } }
           },
           y: {
-            title: { display: true, text: 'Stat Value', color: '#fff', font: { size: 16, weight: 'bold' } },
+            title: { display: true, text: `Stat Value (${monster.monsterName})`, color: '#fff', font: { size: 16, weight: 'bold' } },
             ticks: { color: '#fff', font: { size: 14, weight: 'bold' } }
           }
         }
@@ -247,7 +247,7 @@ export default function Compare() {
     <div>
       <header className="header-bar">
         <div className="header-left">
-          <a href="/" className="logo">FBKaizo AI</a>
+          <a href="/" className="logo">FBK<span className="ai-logo">AI</span>ZO</a>
         </div>
         <nav className="header-right">
           <a href="/">Homepage</a>
