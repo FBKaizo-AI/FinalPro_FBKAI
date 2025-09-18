@@ -1,0 +1,7 @@
+[dotenv@17.2.1] injecting env (6) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+Starting ai-model.js (pid=7000, node=v22.14.0)
+[dotenv@17.2.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+Server running on port 3000
+MongoDB connected
+MongoDB connected
+^C

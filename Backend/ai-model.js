@@ -1,13 +1,28 @@
 // Load environment variables from .env file
 require('dotenv').config();
 
+// Early startup log to aid debugging when the process exits before listening
+console.log(`Starting ai-model.js (pid=${process.pid}, node=${process.version})`);
+
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const cors = require('cors');
-const { GoogleGenAI } = require('@google/genai');
+let GoogleGenAI;
+try {
+  ({ GoogleGenAI } = require('@google/genai'));
+} catch (e) {
+  console.error("Optional dependency '@google/genai' is not installed. Install it with 'npm install @google/genai' in the Backend or repo root.\n", e && e.message);
+  // Keep GoogleGenAI undefined; we'll check later when handling /api/ai-output
+}
 const Monster = require('./monster-model'); // Mongoose model for Monsters
-const Fuse = require ('fuse.js');
+let Fuse;
+try {
+  Fuse = require('fuse.js');
+} catch (e) {
+  console.error("Dependency 'fuse.js' is not installed. Run 'npm install' in Backend or repo root.\n", e && e.message);
+}
 
 const app = express();
 app.use(cors());
@@ -16,8 +31,15 @@ app.use(express.json());
 
 
 
-// Serve frontend static files from /public
-app.use(express.static(path.join(__dirname, '../public')));
+// Serve frontend static files. Prefer Vite build output `public/dist` if present,
+// otherwise fall back to the `public` directory (contains source/static files).
+const distPath = path.join(__dirname, '../public/dist');
+const publicPath = path.join(__dirname, '../public');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+} else {
+  app.use(express.static(publicPath));
+}
 
 
 
@@ -61,11 +83,15 @@ function extractMonsterName(question) {
 
 
 
-// MongoDB Connection, since we have no specific URI variable
+// MongoDB Connection (optional in local dev). Prefer env vars in this order:
 const MONGO_URI = process.env.DUSTIN_MONGO || process.env.MARKELL_MONGO || process.env.JIYAH_MONGO;
 if (!MONGO_URI) {
-  console.error("MongoDB connection string is missing in .env (DUSTIN_MONGO / MARKELL_MONGO / JIYAH_MONGO).");
-  process.exit(1); // Stops server if no URI is set
+  console.warn("MongoDB connection string is missing (DUSTIN_MONGO / MARKELL_MONGO / JIYAH_MONGO). Starting without DB connection — DB-backed endpoints will return errors.");
+} else {
+  // connecting to mongodb
+  mongoose.connect(MONGO_URI)
+    .then(() => console.log('MongoDB connected'))
+    .catch((err) => console.error('MongoDB connection error:', err));
 }
 
 
@@ -76,8 +102,13 @@ mongoose.connect(MONGO_URI)
 
 
 
-// Initialize Gemini AI with API Key
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Initialize Gemini AI with API Key (if dependency is available)
+let ai = null;
+if (GoogleGenAI) {
+  ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+} else {
+  // ai remains null; incoming requests will get a helpful 503 response
+}
 
 
 
@@ -85,6 +116,22 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 // POST endpoint: Receives a user question, queries Gemini AI, saves response
 app.post('/api/ai-output', async (req, res) => {
   try {
+    // Fail fast with a helpful error if AI SDK or API key is missing
+    if (!ai) {
+      return res.status(503).json({
+        error: "Gemini AI SDK not available. Install '@google/genai' and set GEMINI_API_KEY in your environment. See server logs for details."
+      });
+    }
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(503).json({
+        error: "GEMINI_API_KEY is not set. Set your Gemini API key in environment variables."
+      });
+    }
+    if (!Fuse) {
+      return res.status(503).json({
+        error: "Dependency 'fuse.js' is not installed. Run 'npm install' in Backend or repo root. See server logs."
+      });
+    }
     const { question } = req.body;
 
     const allMonsters = await Monster.find({}, { "Monster Name": 1 });
@@ -205,16 +252,32 @@ app.post('/api/ai-output', async (req, res) => {
 });
 
 
-
-
-// Catch-all route: Serve Homepage for any unmatched route
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/src/components/Homepage.jsx'));
+// Lightweight health endpoint for liveness checks
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', pid: process.pid });
 });
 
 
 
 
+// Catch-all route: Serve Homepage for any unmatched route
+app.get('*', (req, res) => {
+
+  const indexPath = path.join(__dirname, '../public/index.html');
+  res.sendFile(indexPath, err => {
+    if (err) {
+      // If the built index isn't present,
+      // return a minimal message instead of failing silently.
+      res.status(200).send('FBKaizo AI backend running. Frontend not served from this instance.');
+    }
+  });
+});
+
+
+
 // Start Express server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`Server running and listening on ${HOST}:${PORT}`);
+});
