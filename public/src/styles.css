@@ -254,6 +254,28 @@ body {
     margin-bottom: 0.2rem;
     word-break: break-word;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+.message-bubble p,
+.message-bubble ul,
+.message-bubble li {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    margin: 0.2em 0;
+}
+.message-bubble pre,
+.message-bubble code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    font-size: 0.86rem;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
 }
 .message-bubble.user {
     background: linear-gradient(90deg, #ffb300 0%, #ffd54f 100%);
